@@ -1,5 +1,7 @@
 ## Overview
+
 **Issue Type**
+
 - [x] Bug
 - [ ] Feature
 - [ ] Tech Debt
@@ -13,7 +15,7 @@ More detailed description of the issue that needed to be addressed.
 **Current Behavior**
 More detailed description of how this PR fixes the associated issue.
 
-**JIRA Issue Link**
+**Trello Task Link**
 
 **Screenshots & Videos**
 If applicable, add screenshots and videos to help explain your issue type.
