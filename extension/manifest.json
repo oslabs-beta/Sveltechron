@@ -5,9 +5,8 @@
   "manifest_version": 3,
   "action": {
     "default_title": "Svelte Extension",
-    "default_icon": "assets/favicon.png",
     "default_popup": "build/index.html",
     "devtools_page": "build/index.html"
   },
-  "background": { "service: worker": "service-worker.js" }
+  "background": { "service_worker": "service-worker.js" }
 }
