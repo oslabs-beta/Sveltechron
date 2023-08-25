@@ -9,13 +9,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.3",
     "@sveltejs/vite-plugin-svelte": "1.1.0",
+    "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/svelte": "^4.0.3",
-    "@tsconfig/svelte": "3.0.0",
+    "@tsconfig/svelte": "^3.0.0",
     "@types/chrome": "0.0.200",
     "@vitest/ui": "^0.34.2",
     "jsdom": "^22.1.0",
@@ -23,7 +25,7 @@
     "svelte-check": "2.9.2",
     "svelte-preprocess": "4.10.7",
     "tslib": "2.4.0",
-    "typescript": "^4.8.4",
+    "typescript": "^4.9.5",
     "vite": "3.2.0",
     "vitest": "^0.34.2"
   }
