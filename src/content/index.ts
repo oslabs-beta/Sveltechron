@@ -8,4 +8,4 @@ import "./styles.css";
 storage.get().then(console.log);
 
 // Some svelte component on the page
-new Overlay({ target: document.body });
+// new Overlay({ target: document.body });
