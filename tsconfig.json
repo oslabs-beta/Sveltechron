@@ -14,8 +14,17 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    //include types so that vitest config and chrome can be accessed globally similar to Jest
+    "types": ["vitest/globals", "chrome"]
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+  // all these will be compiled and have access to compiler options
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "__tests__/*.test.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

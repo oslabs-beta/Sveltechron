@@ -1,25 +1,31 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/svelte'
-import {describe, expect, it, afterEach} from 'vitest';
-import Hello from '../src/components/Overlay.svelte'
+//these must be imported each time
+import { fireEvent, render, screen } from '@testing-library/svelte'
+import '@testing-library/jest-dom' 
+import Options from '../src/components/Options.svelte'
 
-describe('Hello.svelte', () => {
-  // TODO: @testing-library/svelte claims to add this automatically but it doesn't work without explicit afterEach
-  afterEach(() => cleanup())
-
-  it('mounts', () => {
-    const { container } = render(Hello, { count: 4 })
-    expect(container).toBeTruthy()
-    expect(container.innerHTML).toContain('4 x 2 = 8')
-    expect(container.innerHTML).toMatchSnapshot()
+describe('Options.svelte', () => {
+  /**
+   * @author Jay Kura
+   * afterEach(() => cleanup()) is done automatically to clear the dom between tests
+   */
+  test('that shows count when rendered', () => {
+    render(Options, {count: 2});
+    const count = screen.getByText("Current count:")
+    expect(count).toHaveTextContent('Current count: 2')
   })
-
-  it('updates on button click', async () => {
-    render(Hello, { count: 4 })
-    const btn = screen.getByRole('button')
-    const div = screen.getByText('4 x 2 = 8')
-    await fireEvent.click(btn)
-    expect(div.innerHTML).toBe('4 x 3 = 12')
-    await fireEvent.click(btn)
-    expect(div.innerHTML).toBe('4 x 4 = 16')
+  test('number increments when plus button is clicked', async () => {
+    render(Options, {count: 2});
+    const plusButton = screen.getByText("+")
+    const count = screen.getByText("Current count:")
+    await fireEvent.click(plusButton)
+    expect(count).toHaveTextContent('Current count: 3')
+  })
+  test('number increments when minus button is clicked', async () => {
+    render(Options, {count: 10});
+    console.log(screen.getByText("*"))
+    const minusButton = screen.getByText("-")
+    const count = screen.getByText("Current count:")
+    await fireEvent.click(minusButton)
+    expect(count).toHaveTextContent('Current count: 9')
   })
 })
