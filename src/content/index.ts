@@ -1,5 +1,5 @@
 import Overlay from "../components/Overlay.svelte";
-import { storage } from "../storage";
+import { storage } from "../storage.js";
 
 // Some global styles on the page
 import "./styles.css";
@@ -8,4 +8,4 @@ import "./styles.css";
 storage.get().then(console.log);
 
 // Some svelte component on the page
-new Overlay({ target: document.body });
+// new Overlay({ target: document.body });
