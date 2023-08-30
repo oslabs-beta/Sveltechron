@@ -16,7 +16,8 @@
     "checkJs": true,
     "isolatedModules": true,
     //include types so that vitest config and chrome can be accessed globally similar to Jest
-    "types": ["vitest/globals", "chrome"]
+    "types": ["vitest/globals", "chrome"],
+    "ignoreDeprecations": "5.0"
   },
   // all these will be compiled and have access to compiler options
   "include": [
