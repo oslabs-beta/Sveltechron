@@ -1,32 +1,22 @@
 {
-  "name": "chrome-extension-svelte-typescript-boilerplate",
-  "version": "3.0.0",
+  "name": "-sveltechron",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nekitcorp/chrome-extension-svelte-typescript-boilerplate.git"
-  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "test": "vitest"
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.3",
-    "@sveltejs/vite-plugin-svelte": "1.1.0",
-    "@testing-library/jest-dom": "^6.1.2",
-    "@testing-library/svelte": "^4.0.3",
-    "@tsconfig/svelte": "^3.0.0",
-    "@types/chrome": "0.0.200",
-    "@vitest/ui": "^0.34.2",
-    "jsdom": "^22.1.0",
-    "svelte": "3.52.0",
-    "svelte-check": "2.9.2",
-    "svelte-preprocess": "4.10.7",
-    "tslib": "2.4.0",
-    "typescript": "^4.9.5",
-    "vite": "3.2.0",
-    "vitest": "^0.34.2"
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@tsconfig/svelte": "^5.0.0",
+    "@types/chrome": "^0.0.244",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.6",
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }

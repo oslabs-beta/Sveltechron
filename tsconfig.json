@@ -1,11 +1,10 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "esnext",
+    "module": "ESNext",
     "resolveJsonModule": true,
-    "baseUrl": ".",
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.
      * Disable checkJs if you'd like to use dynamic types in JS.
@@ -15,16 +14,8 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
-    //include types so that vitest config and chrome can be accessed globally similar to Jest
-    "types": ["vitest/globals", "chrome"]
+    "strictNullChecks": false //so we can pass null as a arg to the chrome api
   },
-  // all these will be compiled and have access to compiler options
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.svelte",
-    "__tests__/*.test.ts"
-  ],
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
