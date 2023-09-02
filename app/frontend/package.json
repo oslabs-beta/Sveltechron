@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && node src/removeInlineScript.cjs",
+    "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
@@ -25,7 +25,6 @@
   },
   "type": "module",
   "dependencies": {
-    "tiny-glob": "^0.2.9",
     "web-vitals": "^3.4.0"
   }
 }
