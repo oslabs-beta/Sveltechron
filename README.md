@@ -1,39 +1,38 @@
-# Svelte Typescript Chrome Extension Boilerplate
+# create-svelte
 
-> Boilerplate for Chrome Extension Svelte Typescript project
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-## Features
+## Creating a project
 
--   [Svelte](https://svelte.dev/)
--   [TypeScript](https://www.typescriptlang.org/)
--   [Vite](https://vitejs.dev/)
--   [CRXJS Vite Plugin](https://github.com/crxjs/chrome-extension-tools/blob/main/packages/vite-plugin/README.md)
--   [Chrome Extensions Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/)
-
-## Development
+If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
-# install dependencies
-npm i
+# create a new project in the current directory
+npm create svelte@latest
 
-# build files to `/dist` directory
-# HMR for extension pages and content scripts
+# create a new project in my-app
+npm create svelte@latest my-app
+```
+
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
 npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-## Build
+## Building
+
+To create a production version of your app:
 
 ```bash
-# build files to `/dist` directory
-$ npm run build
+npm run build
 ```
 
-## Load unpacked extensions
+You can preview the production build with `npm run preview`.
 
-[Getting Started Tutorial](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
-
-1. Open the Extension Management page by navigating to `chrome://extensions`.
-2. Enable Developer Mode by clicking the toggle switch next to `Developer mode`.
-3. Click the `LOAD UNPACKED` button and select the `/dist` directory.
-
-![Example](https://wd.imgix.net/image/BhuKGJaIeLNPW9ehns59NfwqKxF2/vOu7iPbaapkALed96rzN.png?auto=format&w=571)
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
