@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { storage } from "src/storage.js";
+    import { storage } from "src/storage";
     import { onMount } from "svelte";
     import Options from "./Options.svelte";
 

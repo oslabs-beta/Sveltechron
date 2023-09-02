@@ -1,5 +1,5 @@
 import Overlay from "../components/Overlay.svelte";
-import { storage } from "../storage.js";
+import { storage } from "../storage";
 
 // Some global styles on the page
 import "./styles.css";

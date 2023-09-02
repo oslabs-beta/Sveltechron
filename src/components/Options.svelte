@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { storage } from "../storage.js";
+    import { storage } from "../storage";
 
     export let count: number;
     let successMessage: string = null;
