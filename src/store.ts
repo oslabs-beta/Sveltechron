@@ -1,4 +1,7 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 //example store setup for the demo svelte boilerplate app
-export const count = writable(0) 
+/**
+ * @author Jay
+ */
+export const count = writable(0);
