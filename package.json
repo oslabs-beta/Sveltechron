@@ -13,6 +13,8 @@
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@tsconfig/svelte": "^5.0.0",
     "@types/chrome": "^0.0.244",
+    "@types/d3": "^7.4.0",
+    "d3": "^7.8.5",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.6",
     "tslib": "^2.6.0",
