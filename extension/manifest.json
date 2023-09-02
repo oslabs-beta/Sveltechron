@@ -1,0 +1,12 @@
+{
+  "name": "My Chrome Extension",
+  "description": "A browser extension made with Svelte Kit",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "Svelte Extension",
+    "default_popup": "build/index.html",
+    "devtools_page": "build/index.html"
+  },
+  "background": { "service_worker": "service-worker.js" }
+}
