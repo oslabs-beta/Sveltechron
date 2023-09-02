@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { count } from "../store"; //need to destructure from named exports
+  import { count } from '../store'; //need to destructure from named exports
 
   /**
    * @author Jay
