@@ -19,12 +19,26 @@ import { parse, walk } from 'svelte/compiler';
 // const files = appFiles();
 
 // export default files;
-export const arrSvelteFiles = await new Promise((resolve, reject) => {
-  chrome.devtools.inspectedWindow.getResources((resources) => {
-    const filteredResources = resources.filter((file) =>
+// export const svelteParser = ( async () => { 
+//   await new Promise((resolve, reject) => {
+//   chrome.devtools.inspectedWindow.getResources((resources) => {
+//     const filteredResources = resources.filter((file) =>
+//       file.url.includes('.svelte')
+//     );
+//     if (filteredResources) resolve(filteredResources);
+//     else reject('No Svelte Resources Found');
+//   });
+// });
+// });
+
+export const svelteParser = () => {
+  return new Promise((resolve) => {
+    chrome.devtools.inspectedWindow.getResources((resources) => {
+      const filteredResources = resources.filter((file) =>
       file.url.includes('.svelte')
-    );
-    if (filteredResources) resolve(filteredResources);
-    else reject('No Svelte Resources Found');
-  });
-});
+    )
+    resolve(filteredResources);
+    })
+  })
+
+};

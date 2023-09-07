@@ -4,31 +4,58 @@
   import viteLogo from "/vite.svg";
   import Counter from "./lib/Counter.svelte";
   import DummyTree from "./dummyTree.svelte";
-  // import { arrSvelteFiles } from "./util/parser.ts";
+  import { svelteParser } from "./util/parser.ts";
 
-  onMount(() => {
-    async function parseSvelte() {
-      const targetAppFiles = await new Promise((resolve, reject) => {
-        chrome.devtools.inspectedWindow.getResources((resources) => {
-          const filteredResources = resources.filter((file) =>
-            file.url.includes(".svelte")
-          );
-          if (filteredResources) resolve(filteredResources);
-          else reject("No Svelte Resources Found");
-        });
-      });
-    }
+  let arrFiles: any;
 
-    function getData() {
-      new Promise(async (resolve, reject) => {
-        const data = await parseSvelte();
-        resolve(data);
-      }).then((data) => {
-        console.log(data);
-      });
+  async function getData() {
+    try {
+      const data = await svelteParser();
+      arrFiles = JSON.stringify(data);
+      // arrFiles = "hello";
+      return arrFiles;
+    } catch (error) {
+      console.error("Error fetching data");
     }
+  }
+
+  onMount(async () => {
+    await getData();
   });
-  const data = getData();
+
+  // async function getData() {
+  //   new Promise(async (resolve, reject) => {
+  //     const data = await svelteParser();
+  //     resolve(data);
+  //   }).then((data) => {
+  //     arrFiles = JSON.stringify(data);
+  //     return arrFiles;
+  //   });
+  // }
+
+  // onMount(() => {
+  //   async function parseSvelte() {
+  //     const targetAppFiles = await new Promise((resolve, reject) => {
+  //       chrome.devtools.inspectedWindow.getResources((resources) => {
+  //         const filteredResources = resources.filter((file) =>
+  //           file.url.includes(".svelte")
+  //         );
+  //         if (filteredResources) resolve(filteredResources);
+  //         else reject("No Svelte Resources Found");
+  //       });
+  //     });
+  //   }
+
+  //   function getData() {
+  //     new Promise(async (resolve, reject) => {
+  //       const data = await parseSvelte();
+  //       resolve(data);
+  //     }).then((data) => {
+  //       console.log(data);
+  //     });
+  //   }
+  // });
+  // const data = getData();
 </script>
 
 <main>
@@ -58,7 +85,7 @@
   <div>
     <DummyTree />
   </div>
-  <div><h1>{data}</h1></div>
+  <div><h1>{arrFiles}</h1></div>
 </main>
 
 <style>
