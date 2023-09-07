@@ -1,8 +1,34 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import svelteLogo from "./assets/svelte.svg";
   import viteLogo from "/vite.svg";
   import Counter from "./lib/Counter.svelte";
   import DummyTree from "./dummyTree.svelte";
+  // import { arrSvelteFiles } from "./util/parser.ts";
+
+  onMount(() => {
+    async function parseSvelte() {
+      const targetAppFiles = await new Promise((resolve, reject) => {
+        chrome.devtools.inspectedWindow.getResources((resources) => {
+          const filteredResources = resources.filter((file) =>
+            file.url.includes(".svelte")
+          );
+          if (filteredResources) resolve(filteredResources);
+          else reject("No Svelte Resources Found");
+        });
+      });
+    }
+
+    function getData() {
+      new Promise(async (resolve, reject) => {
+        const data = await parseSvelte();
+        resolve(data);
+      }).then((data) => {
+        console.log(data);
+      });
+    }
+  });
+  const data = getData();
 </script>
 
 <main>
@@ -32,6 +58,7 @@
   <div>
     <DummyTree />
   </div>
+  <div><h1>{data}</h1></div>
 </main>
 
 <style>
