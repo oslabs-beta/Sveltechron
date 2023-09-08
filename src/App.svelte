@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import svelteLogo from "./assets/svelte.svg";
-  import viteLogo from "/vite.svg";
-  import Counter from "./lib/Counter.svelte";
-  import DummyTree from "./dummyTree.svelte";
-  import { svelteParser } from "./util/parser.ts";
+  import { onMount } from 'svelte';
+  import svelteLogo from './assets/svelte.svg';
+  import viteLogo from '/vite.svg';
+  import Counter from './lib/Counter.svelte';
+  import DummyTree from './dummyTree.svelte';
+  import { svelteParser } from './util/parser.ts';
 
   let arrFiles: any;
 
@@ -15,7 +15,7 @@
       // arrFiles = "hello";
       return arrFiles;
     } catch (error) {
-      console.error("Error fetching data");
+      console.error('Error fetching data');
     }
   }
 
