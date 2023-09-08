@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import TimelineSlider from './components/timelineSlider.svelte';
   import Controls from './components/controls.svelte';
 
@@ -50,4 +50,9 @@
     background: linear-gradient (90deg, #c72611, #e75709);
     position: absolute;
   }
-</style>
+</style> -->
+<script lang="ts">
+  import TimelineSlider from './components/timelineSlider.svelte';
+</script>
+
+<TimelineSlider />
