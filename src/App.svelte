@@ -1,10 +1,63 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import svelteLogo from './assets/svelte.svg';
   import viteLogo from '/vite.svg';
   import Counter from './lib/Counter.svelte';
   import DummyTree from './dummyTree.svelte';
+  import { svelteParser } from './util/parser.ts';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
+
+  let arrFiles: any;
+
+  async function getData() {
+    try {
+      const data = await svelteParser();
+      arrFiles = JSON.stringify(data);
+      // arrFiles = "hello";
+      return arrFiles;
+    } catch (error) {
+      console.error('Error fetching data');
+    }
+  }
+
+  onMount(async () => {
+    await getData();
+  });
+
+  // async function getData() {
+  //   new Promise(async (resolve, reject) => {
+  //     const data = await svelteParser();
+  //     resolve(data);
+  //   }).then((data) => {
+  //     arrFiles = JSON.stringify(data);
+  //     return arrFiles;
+  //   });
+  // }
+
+  // onMount(() => {
+  //   async function parseSvelte() {
+  //     const targetAppFiles = await new Promise((resolve, reject) => {
+  //       chrome.devtools.inspectedWindow.getResources((resources) => {
+  //         const filteredResources = resources.filter((file) =>
+  //           file.url.includes(".svelte")
+  //         );
+  //         if (filteredResources) resolve(filteredResources);
+  //         else reject("No Svelte Resources Found");
+  //       });
+  //     });
+  //   }
+
+  //   function getData() {
+  //     new Promise(async (resolve, reject) => {
+  //       const data = await parseSvelte();
+  //       resolve(data);
+  //     }).then((data) => {
+  //       console.log(data);
+  //     });
+  //   }
+  // });
+  // const data = getData();
 </script>
 
 <main class="grid">
@@ -16,7 +69,6 @@
   </div>
   <div class="content">Content</div>
   <div class="sidebar">Sidebar</div>
-  <!-- <Navbar />
 
   <div>
     <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
@@ -43,7 +95,8 @@
   <p class="read-the-docs">Click on the Vite and Svelte logos to learn more</p>
   <div>
     <DummyTree />
-  </div> -->
+  </div>
+  <div><h1>{arrFiles}</h1></div>
 </main>
 
 <style>
