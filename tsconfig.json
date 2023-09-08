@@ -15,7 +15,8 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
-    "strictNullChecks": false //so we can pass null as a arg to the chrome api
+    "strictNullChecks": false, //so we can pass null as a arg to the chrome api,
+    "noImplicitAny": false //to resolve bug where svelte preprocess cannot parse typescript in .svelte html sections
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
   "references": [{ "path": "./tsconfig.node.json" }]
