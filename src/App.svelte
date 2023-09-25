@@ -7,6 +7,7 @@
   import { svelteParser } from './util/parser.ts';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
+  import Sidebar from './components/sidebar/sidebar.svelte';
 
   let arrFiles: any;
 
@@ -33,24 +34,26 @@
   <div class="footer">
     <Footer />
   </div>
-  <div class="content">Content</div>
-  <div class="sidebar">Sidebar</div>
-
-  <div>
+  <div class="content">
     <DummyTree />
   </div>
+  <div class="sidebar">
+    <Sidebar />
+  </div>
+
+  <div />
   <div><h1>{arrFiles}</h1></div>
 </main>
 
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     /* grid-auto-rows: minmax(100px, auto); */
     grid-template:
-      'sd hd hd hd'
-      'sd main main main'
-      'ft ft ft ft';
+      'sd hd hd hd hd hd hd hd'
+      'sd main main main main main main main'
+      'ft ft ft ft ft ft ft ft';
     width: 100vw;
   }
 

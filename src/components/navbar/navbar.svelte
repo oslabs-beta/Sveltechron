@@ -48,6 +48,8 @@
     width: 100%;
     background-color: white;
     color: black;
+    border: 3px solid black;
+    height: 50px;
   }
 
   .pages {
