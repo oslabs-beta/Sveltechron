@@ -48,12 +48,12 @@
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     /* grid-auto-rows: minmax(100px, auto); */
     grid-template:
-      'sd hd hd hd hd hd hd hd'
-      'sd main main main main main main main'
-      'ft ft ft ft ft ft ft ft';
+      'sd hd hd hd hd hd hd hd hd'
+      'sd main main main main main main main main '
+      'ft ft ft ft ft ft ft ft ft';
     width: 100vw;
   }
 
