@@ -5,7 +5,7 @@
   "devtools_page": "devtools.html",
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["*://*/*", "<all_urls>"],
       "js": ["./contentScript.js"],
       "run_at": "document_start"
     }
