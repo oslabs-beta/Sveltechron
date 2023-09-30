@@ -1,30 +1,28 @@
-<script lang="ts">
+<script>
   import { onMount } from 'svelte';
   import svelteLogo from './assets/svelte.svg';
   import viteLogo from '/vite.svg';
   import Counter from './lib/Counter.svelte';
   import DummyTree from './dummyTree.svelte';
-  import { svelteParser } from './util/parser.ts';
+  import svelteParser from './util/parser.ts';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
   import Sidebar from './components/sidebar/sidebar.svelte';
   import ClearButton from './components/sidebar/clearButton.svelte';
 
-  let arrFiles: any;
+  let arrFiles;
 
   async function getData() {
     try {
-      const data = await svelteParser();
-      arrFiles = JSON.stringify(data);
-      // arrFiles = "hello";
-      return arrFiles;
+      const result = await svelteParser();
+      return 'hello';
     } catch (error) {
-      console.error('Error fetching data');
+      console.error('error fetching data', error);
     }
   }
 
   onMount(async () => {
-    await getData();
+    arrFiles = await getData();
   });
 </script>
 
@@ -44,6 +42,7 @@
   <div class="sidebar">
     <Sidebar />
   </div>
+  <div>{arrFiles}</div>
 </main>
 
 <style>
