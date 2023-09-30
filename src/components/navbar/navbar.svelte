@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   //if button cicked then access focus state
 
   import { createEventDispatcher } from 'svelte';
@@ -9,6 +10,20 @@
   let stateOrDiff: string = 'State';
   //on click toggle to true
   //if true, then change other components to false
+
+  // onMount(() => {
+  //   chrome.runtime.onMessage.addListener(function (
+  //     request,
+  //     sender,
+  //     sendResponse
+  //   ) {
+  //     switch (request.message) {
+  //       case 'test test':
+  //         () => console.log('this is the request.message');
+  //         break;
+  //     }
+  //   });
+  // });
 </script>
 
 <nav>

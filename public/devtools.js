@@ -1,1 +1,1 @@
-chrome.devtools.panels.create("Sveltechron", null, "index.html");
+chrome.devtools.panels.create('Sveltechron', null, 'index.html');

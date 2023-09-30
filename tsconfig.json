@@ -18,6 +18,13 @@
     "strictNullChecks": false, //so we can pass null as a arg to the chrome api,
     "noImplicitAny": false //to resolve bug where svelte preprocess cannot parse typescript in .svelte html sections
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "public/service_worker.js",
+    "public/test2.js"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

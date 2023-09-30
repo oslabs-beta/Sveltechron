@@ -1,30 +1,33 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
-  import svelteLogo from './assets/svelte.svg';
-  import viteLogo from '/vite.svg';
-  import Counter from './lib/Counter.svelte';
   import DummyTree from './dummyTree.svelte';
-  import svelteParser from './util/parser.ts';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
   import Sidebar from './components/sidebar/sidebar.svelte';
   import ClearButton from './components/sidebar/clearButton.svelte';
 
-  let arrFiles;
+  // window.document.addEventListener('dblclick', () => {
+  //   chrome.runtime.sendMessage({ message: 'test test' });
+  //   console.log('I dblclicked and message sent');
+  // });
 
-  async function getData() {
-    try {
-      const result = await svelteParser();
-      return 'hello';
-    } catch (error) {
-      console.error('error fetching data', error);
-    }
-  }
+  // chrome.runtime.onMessage.addListener(function (
+  //   request,
+  //   sender,
+  //   sendResponse
+  // ) {
+  //   switch (request.message) {
+  //     case 'test test':
+  //       () => console.log('this is the request.message');
+  //   }
+  // });
 
-  onMount(async () => {
-    arrFiles = await getData();
-  });
+  // window.document.addEventListener('SvelteDOMRemove', () =>
+  //   console.log('SvelteDOMRemove')
+  // );
 </script>
+
+<!-- <svelte:window on:keydown={() => console.log('this works')} /> -->
 
 <main class="grid">
   <div class="header">
@@ -42,7 +45,6 @@
   <div class="sidebar">
     <Sidebar />
   </div>
-  <div>{arrFiles}</div>
 </main>
 
 <style>
