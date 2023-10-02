@@ -6,25 +6,18 @@
   import Sidebar from './components/sidebar/sidebar.svelte';
   import ClearButton from './components/sidebar/clearButton.svelte';
 
-  // window.document.addEventListener('dblclick', () => {
-  //   chrome.runtime.sendMessage({ message: 'test test' });
-  //   console.log('I dblclicked and message sent');
-  // });
-
-  // chrome.runtime.onMessage.addListener(function (
-  //   request,
-  //   sender,
-  //   sendResponse
-  // ) {
-  //   switch (request.message) {
-  //     case 'test test':
-  //       () => console.log('this is the request.message');
-  //   }
-  // });
-
-  // window.document.addEventListener('SvelteDOMRemove', () =>
-  //   console.log('SvelteDOMRemove')
-  // );
+  chrome.runtime.onMessage.addListener(function (
+    request,
+    sender,
+    sendResponse
+  ) {
+    console.log(
+      sender.tab
+        ? 'from a content script:' + sender.tab.url
+        : 'from the extension'
+    );
+    if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
+  });
 </script>
 
 <!-- <svelte:window on:keydown={() => console.log('this works')} /> -->
