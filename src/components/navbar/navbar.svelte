@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   //if button cicked then access focus state
 
   import { createEventDispatcher } from 'svelte';
@@ -9,6 +10,20 @@
   let stateOrDiff: string = 'State';
   //on click toggle to true
   //if true, then change other components to false
+
+  // onMount(() => {
+  //   chrome.runtime.onMessage.addListener(function (
+  //     request,
+  //     sender,
+  //     sendResponse
+  //   ) {
+  //     switch (request.message) {
+  //       case 'test test':
+  //         () => console.log('this is the request.message');
+  //         break;
+  //     }
+  //   });
+  // });
 </script>
 
 <nav>
@@ -45,9 +60,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: calc(100% - 6px);
+    height: 100%;
     background-color: white;
     color: black;
+    border: 3px solid black;
+    margin-left: -3px;
+    padding-left: 6px;
+    margin-left: -3px;
   }
 
   .pages {
@@ -64,6 +84,8 @@
     margin: 5px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     border: 3px solid black;
+    color: black;
+    background-color: white;
   }
 
   #diff {
@@ -77,8 +99,8 @@
   }
 
   .selected {
-    background-color: white;
-    color: black;
+    background-color: black;
+    color: white;
   }
 
   .state-diff {

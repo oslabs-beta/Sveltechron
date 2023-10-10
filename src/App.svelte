@@ -1,62 +1,94 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import svelteLogo from './assets/svelte.svg';
-  import viteLogo from '/vite.svg';
-  import Counter from './lib/Counter.svelte';
   import DummyTree from './dummyTree.svelte';
-  import { svelteParser } from './util/parser.ts';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
+  import Sidebar from './components/sidebar/sidebar.svelte';
+  import ClearButton from './components/sidebar/clearButton.svelte';
 
-  let arrFiles: any;
-
-  async function getData() {
-    try {
-      const data = await svelteParser();
-      arrFiles = JSON.stringify(data);
-      // arrFiles = "hello";
-      return arrFiles;
-    } catch (error) {
-      console.error('Error fetching data');
-    }
-  }
-
-  onMount(async () => {
-    await getData();
+  chrome.runtime.onMessage.addListener(function (
+    request,
+    sender,
+    sendResponse
+  ) {
+    console.log(
+      sender.tab
+        ? 'from a content script:' + sender.tab.url
+        : 'from the extension'
+    );
+    if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
   });
 </script>
+
+<!-- <svelte:window on:keydown={() => console.log('this works')} /> -->
 
 <main class="grid">
   <div class="header">
     <Navbar />
   </div>
+  <div class="clear">
+    <ClearButton />
+  </div>
   <div class="footer">
     <Footer />
   </div>
-  <div class="content">Content</div>
-  <div class="sidebar">Sidebar</div>
-
-  <div>
+  <div class="content">
     <DummyTree />
   </div>
-  <div><h1>{arrFiles}</h1></div>
+  <div class="sidebar">
+    <Sidebar />
+  </div>
 </main>
 
 <style>
+  main {
+    height: 100vh;
+    width: 100%;
+  }
   .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* grid-auto-rows: minmax(100px, auto); */
+    grid-template-columns: repeat(9, 1fr);
     grid-template:
-      'sd hd hd hd'
-      'sd main main main'
-      'ft ft ft ft';
-    width: 100vw;
+      'clr clr hd hd hd  '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'sd sd  main main main '
+      'ft ft ft ft ft '
+      'ft ft ft ft ft '
+      'ft ft ft ft ft '
+      'ft ft ft ft ft ';
+  }
+
+  .clear {
+    grid-area: clr;
   }
 
   .header {
     grid-area: hd;
-    background-color: yellow;
+    background-color: white;
   }
 
   .footer {
@@ -72,5 +104,7 @@
   .sidebar {
     grid-area: sd;
     background-color: blue;
+    width: 15vw;
+    /* overwrites automatic grid spacing to give the sidebar more space */
   }
 </style>

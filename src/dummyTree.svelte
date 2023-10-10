@@ -24,13 +24,13 @@
           b.height - a.height || a.data.name.localeCompare(b.data.name)
       );
 
-    let treeLayout = d3.tree().size([580, 80]);
+    let treeLayout = d3.tree().size([300, 80]);
 
     // Next, we call the layout function, passing it the root node. The layout function adds x and y properties to each node in the model.
 
     treeLayout(root);
     //render the circles
-    let svg = d3.select('#demo1');
+    let svg = d3.select('#tree-container'); //change this to change where tree is inserted
     console.log('this is the svg:', svg);
     console.log('this is the root:', root);
     console.log('this is the data:', data);
@@ -73,29 +73,52 @@
       .attr('stroke', 'darkgray')
       .attr('stroke-width', 1);
   });
-
-  // function createAndAppendElement() {
-  //     let element = document.createElement('div');
-  //     element.textContent = 'Programmatically created element';
-  //     document.getElementById('test').appendChild(element); // Append to the component's root
-  //   }
 </script>
 
-<div id="test">Test test</div>
-<svg id="demo1" width="600" height="100">
-  <g transform="translate(0,10)">
-    <g class="links" />
-    <g class="nodes" />
-  </g>
-</svg>
-
-<!-- <button on:click={createAndAppendElement}>Create Element</button> -->
+<div id="main-container">
+  <div>Tree</div>
+  <div>Step</div>
+  <svg id="tree-container">
+    <g>
+      <g class="links" />
+      <g class="nodes" />
+    </g>
+  </svg>
+  <div id="state-props-container">
+    <div id="state-container">State</div>
+    <div id="props-container">Props</div>
+  </div>
+</div>
 
 <style>
-  /* Add styles to the programmatically created element if needed */
-  div {
-    background-color: lightblue;
-    padding: 10px;
-    margin-top: 10px;
+  #main-container {
+    display: flex;
+    flex-direction: row;
+    border: 3px solid black;
+    background-color: grey;
+    height: calc(100%);
+    width: calc(100% - 3px);
+  }
+
+  #tree-container {
+    width: 50%;
+    border: 1px solid yellow;
+  }
+
+  #state-props-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border: 1px solid red;
+  }
+
+  #state-container {
+    border: 1px solid pink;
+    height: 50%;
+  }
+
+  #props-container {
+    border: 1px solid pink;
+    height: 50%;
   }
 </style>
