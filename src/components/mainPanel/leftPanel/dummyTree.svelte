@@ -24,13 +24,13 @@
           b.height - a.height || a.data.name.localeCompare(b.data.name)
       );
 
-    let treeLayout = d3.tree().size([300, 80]);
+    let treeLayout = d3.tree().size([580, 800]);
 
     // Next, we call the layout function, passing it the root node. The layout function adds x and y properties to each node in the model.
 
     treeLayout(root);
     //render the circles
-    let svg = d3.select('#tree-container'); //change this to change where tree is inserted
+    let svg = d3.select('#tree-container');
     console.log('this is the svg:', svg);
     console.log('this is the root:', root);
     console.log('this is the data:', data);
@@ -73,52 +73,33 @@
       .attr('stroke', 'darkgray')
       .attr('stroke-width', 1);
   });
+
+  // function createAndAppendElement() {
+  //     let element = document.createElement('div');
+  //     element.textContent = 'Programmatically created element';
+  //     document.getElementById('test').appendChild(element); // Append to the component's root
+  //   }
 </script>
 
-<div id="main-container">
-  <div>Tree</div>
-  <div>Step</div>
-  <svg id="tree-container">
-    <g>
-      <g class="links" />
-      <g class="nodes" />
-    </g>
-  </svg>
-  <div id="state-props-container">
-    <div id="state-container">State</div>
-    <div id="props-container">Props</div>
-  </div>
-</div>
+<svg id="tree-container">
+  <g transform="translate(0,10)">
+    <g class="links" />
+    <g class="nodes" />
+  </g>
+</svg>
+
+<!-- <button on:click={createAndAppendElement}>Create Element</button> -->
 
 <style>
-  #main-container {
-    display: flex;
-    flex-direction: row;
-    border: 3px solid black;
-    background-color: grey;
-    height: calc(100%);
-    width: calc(100% - 3px);
+  /* Add styles to the programmatically created element if needed */
+  g {
+    height: 100%;
+    border: 10px solid yellow;
   }
 
-  #tree-container {
-    width: 50%;
-    border: 1px solid yellow;
-  }
-
-  #state-props-container {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    border: 1px solid red;
-  }
-
-  #state-container {
-    border: 1px solid pink;
-    height: 50%;
-  }
-
-  #props-container {
-    border: 1px solid pink;
-    height: 50%;
+  div {
+    background-color: lightblue;
+    padding: 10px;
+    margin-top: 10px;
   }
 </style>

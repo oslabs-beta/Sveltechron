@@ -81,7 +81,7 @@
   }
 
   nav button {
-    margin: 5px;
+    margin: 3px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     border: 3px solid black;
     color: black;
@@ -94,8 +94,8 @@
   }
 
   #state {
-    padding: 5px 21px;
     border-radius: 18px 0px 0px 18px;
+    padding: 5px 21px;
   }
 
   .selected {

@@ -1,26 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import DummyTree from './dummyTree.svelte';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
   import Sidebar from './components/sidebar/sidebar.svelte';
   import ClearButton from './components/sidebar/clearButton.svelte';
+  import MainPanel from './components/mainPanel/mainPanel.svelte';
 
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse
-  ) {
-    console.log(
-      sender.tab
-        ? 'from a content script:' + sender.tab.url
-        : 'from the extension'
-    );
-    if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
-  });
+  // chrome.runtime.onMessage.addListener(function (
+  //   request,
+  //   sender,
+  //   sendResponse
+  // ) {
+  //   console.log(
+  //     sender.tab
+  //       ? 'from a content script:' + sender.tab.url
+  //       : 'from the extension'
+  //   );
+  //   if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
+  // });
 </script>
-
-<!-- <svelte:window on:keydown={() => console.log('this works')} /> -->
 
 <main class="grid">
   <div class="header">
@@ -33,7 +31,7 @@
     <Footer />
   </div>
   <div class="content">
-    <DummyTree />
+    <MainPanel />
   </div>
   <div class="sidebar">
     <Sidebar />
@@ -99,12 +97,14 @@
   .content {
     grid-area: main;
     background-color: green;
+    min-width: 40vw;
+    min-height: 10vh;
   }
 
   .sidebar {
     grid-area: sd;
     background-color: blue;
-    width: 15vw;
+    width: 12vw;
     /* overwrites automatic grid spacing to give the sidebar more space */
   }
 </style>

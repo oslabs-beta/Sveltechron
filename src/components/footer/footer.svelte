@@ -51,8 +51,8 @@
     position: absolute;
   }
 </style> -->
-<script lang="ts">
+<!-- <script lang="ts">
   import TimelineSlider from './components/timelineSlider.svelte';
 </script>
 
-<TimelineSlider />
+<TimelineSlider /> -->
