@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [svelte()],
   build: {
     target: 'esnext',
+    minify: false,
   },
 });

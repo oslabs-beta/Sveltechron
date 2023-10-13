@@ -18,9 +18,17 @@
   //   );
   //   if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
   // });
+
+  let active = false;
 </script>
 
-<main class="grid">
+<div>
+  <button class:active on:click={() => (active = !active)}
+    >Click me to make me green
+  </button>
+</div>
+
+<!-- <main class="grid">
   <div class="header">
     <Navbar />
   </div>
@@ -36,9 +44,14 @@
   <div class="sidebar">
     <Sidebar />
   </div>
-</main>
+</main> -->
 
 <style>
+  .active {
+    background-color: green;
+    color: white;
+  }
+
   main {
     height: 100vh;
     width: 100%;
