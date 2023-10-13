@@ -1,30 +1,22 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es5",
     "useDefineForClassFields": true,
     "module": "ESNext",
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    /**
-     * Typecheck JS in `.svelte` and `.js` files by default.
-     * Disable checkJs if you'd like to use dynamic types in JS. P
-     * Note that setting allowJs false does not prevent the use
-     * of JS in `.svelte` files.
-     */
+    "outDir": "./build/",
+    "sourceMap": true,
+    "noImplicitAny": false,
     "allowJs": true,
-    "checkJs": true,
     "isolatedModules": true,
-    "strictNullChecks": false, //so we can pass null as a arg to the chrome api,
-    "noImplicitAny": false //to resolve bug where svelte preprocess cannot parse typescript in .svelte html sections
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*.d.ts",
     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.svelte",
-    "public/service_worker.js",
-    "public/test2.js"
+    "extension/*.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["build", "node_modules"]
 }
