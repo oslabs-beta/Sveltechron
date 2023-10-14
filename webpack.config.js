@@ -16,7 +16,7 @@ module.exports = {
     panel: path.join(__dirname, 'src/main.ts'), //bundles the svelte application
     devtools: path.join(__dirname, 'extension', 'devtools.js'),
   },
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
   resolve: {
     // see below for an explanation
     alias: {
@@ -36,30 +36,22 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
-    new HtmlWebpackPlugin({
-      filename: 'devtools.html',
-      cache: false,
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'panel.html',
-      cache: false,
-    }),
     new CopyWebpackPlugin({
       patterns: [
         {
           from: 'extension/manifest.json',
           to: path.join(__dirname, 'build'),
           force: true,
-          transform: function (content, path) {
-            // generates the manifest file using the package.json informations
-            return Buffer.from(
-              JSON.stringify({
-                description: process.env.npm_package_description,
-                version: process.env.npm_package_version,
-                ...JSON.parse(content.toString()),
-              })
-            );
-          },
+        },
+        {
+          from: 'extension/panel.html',
+          to: path.join(__dirname, 'build'),
+          force: true,
+        },
+        {
+          from: 'extension/devtools.html',
+          to: path.join(__dirname, 'build'),
+          force: true,
         },
       ],
     }),
