@@ -1,5 +1,3 @@
-const test = 'test';
-
 window.document.addEventListener('dblclick', async () => {
   console.log('I dblclicked and message sent');
   const response = await chrome.runtime.sendMessage({ greeting: 'hello' });

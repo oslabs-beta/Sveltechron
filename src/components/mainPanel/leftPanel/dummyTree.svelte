@@ -97,9 +97,9 @@
     border: 10px solid yellow;
   }
 
-  div {
+  /* div {
     background-color: lightblue;
     padding: 10px;
     margin-top: 10px;
-  }
+  } */
 </style>

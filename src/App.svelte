@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  // import { onMount } from 'svelte';
   import Navbar from './components/navbar/navbar.svelte';
   import Footer from './components/footer/footer.svelte';
   import Sidebar from './components/sidebar/sidebar.svelte';
@@ -18,17 +18,9 @@
   //   );
   //   if (request.greeting === 'hello') sendResponse({ farewell: 'goodbye' });
   // });
-
-  let active = false;
 </script>
 
-<div>
-  <button class:active on:click={() => (active = !active)}
-    >Click me to make me green
-  </button>
-</div>
-
-<!-- <main class="grid">
+<main class="grid">
   <div class="header">
     <Navbar />
   </div>
@@ -44,14 +36,9 @@
   <div class="sidebar">
     <Sidebar />
   </div>
-</main> -->
+</main>
 
 <style>
-  .active {
-    background-color: green;
-    color: white;
-  }
-
   main {
     height: 100vh;
     width: 100%;

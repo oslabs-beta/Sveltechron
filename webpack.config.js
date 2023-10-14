@@ -7,19 +7,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
+const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     contentScript: path.join(__dirname, 'extension', 'contentScript.js'),
-    app: path.join(__dirname, 'index.html'),
+    panel: path.join(__dirname, 'src/main.ts'), //bundles the svelte application
     devtools: path.join(__dirname, 'extension', 'devtools.js'),
   },
   devtool: 'inline-source-map',
   resolve: {
     // see below for an explanation
     alias: {
-      svelte: path.resolve('node_modules', 'svelte/src/runtime'), // Svelte 3: path.resolve('node_modules', 'svelte')
+      svelte: path.resolve('node_modules', 'svelte/'), // Svelte 3: path.resolve('node_modules', 'svelte')
     },
     extensions: ['.ts', '.js', '.svelte'],
     mainFields: ['svelte', 'browser', 'module', 'main'],
@@ -28,15 +29,19 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'build'),
+    publicPath: ASSET_PATH,
     clean: true,
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: 'devtools.html',
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'panel.html',
       cache: false,
     }),
     new CopyWebpackPlugin({
@@ -62,17 +67,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
         test: /\.(html|svelte)$/,
         use: {
           loader: 'svelte-loader',
           options: {
             preprocess: sveltePreprocess(),
-            emitCss: true,
+            emitCss: false,
             hotReload: !prod,
             dev: !prod,
           },
