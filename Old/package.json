@@ -1,0 +1,30 @@
+{
+  "name": "sveltechron",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "",
+    "build": "webpack --mode=production --config webpack.config.js"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
+    "d3": "^7.8.5",
+    "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
+    "path": "^0.12.7",
+    "prettier": "^3.0.3",
+    "svelte": "^3.49.0",
+    "svelte-listener": "github:RedHatter/svelte-listener",
+    "svelte-loader": "^3.1.9",
+    "svelte-preprocess": "^5.0.4",
+    "typescript": "^5.0.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
