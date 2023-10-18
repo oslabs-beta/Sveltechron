@@ -47,37 +47,27 @@
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     grid-template:
-      'clr clr hd hd hd  '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'sd sd  main main main '
-      'ft ft ft ft ft '
-      'ft ft ft ft ft '
-      'ft ft ft ft ft '
-      'ft ft ft ft ft ';
+      'clr  hd hd hd  '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main '
+      'sd  main main main ';
   }
 
   .clear {
@@ -104,7 +94,7 @@
   .sidebar {
     grid-area: sd;
     background-color: blue;
-    width: 12vw;
+    min-width: 12vw;
     /* overwrites automatic grid spacing to give the sidebar more space */
   }
 </style>
