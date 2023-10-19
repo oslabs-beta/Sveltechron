@@ -4,7 +4,7 @@
     "d3": "^7.8.4",
     "path": "^0.12.7"
   },
-  "name": "sveltedevtools",
+  "name": "sveltechron",
   "description": "dev tools for svelte (OSP)",
   "version": "1.0.0",
   "main": "./src/main.ts",
@@ -12,9 +12,6 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "@testing-library/svelte": "^4.0.4",
     "@tsconfig/svelte": "^4.0.1",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.23",
-    "postcss-load-config": "^4.0.1",
     "prettier": "2.8.8",
     "prettier-plugin-svelte": "^2.10.1",
     "svelte": "^3.57.0",
@@ -27,22 +24,6 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.4.2",
-    "@tsconfig/svelte": "^5.0.0",
-    "@types/chrome": "^0.0.244",
-    "@types/d3": "^7.4.0",
-    "acorn": "^8.10.0",
-    "d3": "^7.8.5",
-    "prettier": "^3.0.3",
-    "svelte": "^4.0.5",
-    "svelte-check": "^3.4.6",
-    "tslib": "^2.6.0",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "build": "vite build"
   }
 }
