@@ -16,6 +16,10 @@
       "run_at": "document_start"
     }
   ],
-
+  "background": {
+    "type": "module",
+    "service_worker": "background.js",
+    "run_at": "document_start"
+  },
   "devtools_page": "devtools/index.html"
 }

@@ -10,6 +10,7 @@
   "main": "./src/main.ts",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
+    "@testing-library/svelte": "^4.0.4",
     "@tsconfig/svelte": "^4.0.1",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
@@ -21,7 +22,8 @@
     "svelte-preprocess": "^5.0.4",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vitest": "^0.34.6"
   },
   "scripts": {
     "dev": "vite",
