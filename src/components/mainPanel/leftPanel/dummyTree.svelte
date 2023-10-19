@@ -2,20 +2,30 @@
   import * as d3 from 'd3';
   import { onMount } from 'svelte';
 
+  export let currentView;
+
   interface TreeNode {
     name: string;
     children?: TreeNode[];
   }
+  let data: TreeNode = {
+    name: 'A',
+    children: [
+      { name: 'C' },
+      { name: 'D', children: [{ name: 'F' }, { name: 'E' }] },
+      { name: 'B' },
+    ],
+  };
 
+  const string: string = JSON.stringify(data);
+  // const width = document
+  //   .getElementById('treecontainer')
+  //   .getBoundingClientRect().width;
   onMount(() => {
-    let data: TreeNode = {
-      name: 'A',
-      children: [
-        { name: 'C' },
-        { name: 'D', children: [{ name: 'F' }, { name: 'E' }] },
-        { name: 'B' },
-      ],
-    };
+    console.log('currentView', currentView);
+    const { height, width } = document
+      .getElementById('left-panel')
+      .getBoundingClientRect();
 
     let root = d3
       .hierarchy(data)
@@ -24,16 +34,13 @@
           b.height - a.height || a.data.name.localeCompare(b.data.name)
       );
 
-    let treeLayout = d3.tree().size([580, 800]);
+    let treeLayout = d3.tree().size([width, height - 150]);
 
     // Next, we call the layout function, passing it the root node. The layout function adds x and y properties to each node in the model.
 
     treeLayout(root);
     //render the circles
     let svg = d3.select('#tree-container');
-    console.log('this is the svg:', svg);
-    console.log('this is the root:', root);
-    console.log('this is the data:', data);
 
     svg
       .select('g.links')
@@ -81,20 +88,24 @@
   //   }
 </script>
 
-<svg id="tree-container">
-  <g transform="translate(0,10)">
-    <g class="links" />
-    <g class="nodes" />
-  </g>
-</svg>
+{#if currentView === 'tree'}
+  <svg id="tree-container">
+    <g transform="translate(0,20)">
+      <g class="links" />
+      <g class="nodes" />
+    </g>
+  </svg>
+{:else}
+  <div id="tree-container">{string}</div>
+{/if}
 
 <!-- <button on:click={createAndAppendElement}>Create Element</button> -->
 
 <style>
   /* Add styles to the programmatically created element if needed */
-  g {
+  #tree-container {
     height: 100%;
-    border: 10px solid yellow;
+    width: 100%;
   }
 
   /* div {

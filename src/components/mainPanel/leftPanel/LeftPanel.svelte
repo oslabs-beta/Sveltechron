@@ -40,11 +40,9 @@
     >
   </div>
   {#if treeOrStep === 'Tree'}
-    <div>
-      <DummyTree />
-    </div>
+    <DummyTree currentView="tree" />
   {:else}
-    <div>Step</div>
+    <DummyTree currentView="step" />
   {/if}
 </div>
 
@@ -52,7 +50,6 @@
   .container {
     color: black;
     height: 100%;
-    border: 1px solid red;
   }
 
   button {
