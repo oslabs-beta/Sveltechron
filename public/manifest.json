@@ -1,13 +1,25 @@
 {
   "manifest_version": 3,
   "name": "Sveltechron",
-  "version": "1.0.1",
-  "devtools_page": "devtools.html",
+  "version": "1.0.0",
+  "description": "Browser devtools extension for debugging Svelte applications.",
   "content_scripts": [
     {
-      "matches": ["*://*/*", "<all_urls>"],
-      "js": ["./contentScript.js"],
+      "world": "MAIN",
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["contentMain.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["contentIsolated.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "background": {
+    "type": "module",
+    "service_worker": "serviceWorker.js",
+    "run_at": "document_start"
+  },
+  "devtools_page": "devtools.html"
 }
