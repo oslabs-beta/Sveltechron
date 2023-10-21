@@ -20,7 +20,7 @@ function addViaMessage(node) {
     target: node.parent ? node.parent.id : null,
     type: 'addNode',
     node: processNode(node),
-    source: 'content.js',
+    source: 'contentMain.js',
   });
 }
 
@@ -29,7 +29,7 @@ function updateViaMessage(node) {
   window.postMessage({
     type: 'updateNode',
     node: processNode(node),
-    source: 'content.js',
+    source: 'contentMain.js',
   });
 }
 
@@ -38,7 +38,7 @@ function removeViaMessage(node) {
   window.postMessage({
     type: 'removeNode',
     node: processNode(node),
-    source: 'content.js',
+    source: 'contentMain.js',
   });
 }
 
@@ -323,7 +323,7 @@ function EVENT_CALLBACK_SvelteRegisterBlock(e) {
 function EVENT_CALLBACK_SvelteRegisterComponent(event) {
   const { component, tagName } = event.detail;
 
-  //grab the content element associated with the node
+  //grab the contentMain element associated with the node
   const node = nodeMap.get(component.$$.fragment);
 
   //if it exists, update the nodeMap. else add it to the nodeMap.
