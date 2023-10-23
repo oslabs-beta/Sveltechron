@@ -1,6 +1,6 @@
 <script>
   import * as d3 from 'd3';
-  import { treeData, rootNodes, process_ctx } from '../store';
+  import { treeData, rootNodes, process_ctx } from '../../../store';
   import { onMount, afterUpdate } from 'svelte';
 
   let shouldWait = false;
@@ -246,7 +246,7 @@
       d3.select(this.parentNode).select('rect').style('opacity', 0);
       const currentNodeId = Number(this.parentNode.id);
       d3.selectAll('g.node').each(function () {
-        const nodeId = this.id;
+        // const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
           d3.select(this).style('opacity', 1);

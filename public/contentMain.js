@@ -14,8 +14,11 @@ let _id = 0;
 //          MESSAGE FUNCTIONS
 // ========================================================================================
 
+console.log('contentMain running');
+
 // sends message which triggers adding of node
 function addViaMessage(node) {
+  console.log('addViaMessage:', node);
   window.postMessage({
     target: node.parent ? node.parent.id : null,
     type: 'addNode',
@@ -26,6 +29,7 @@ function addViaMessage(node) {
 
 // sends message which triggers updating of node
 function updateViaMessage(node) {
+  console.log('updateViaMessage:', node);
   window.postMessage({
     type: 'updateNode',
     node: processNode(node),
@@ -35,6 +39,7 @@ function updateViaMessage(node) {
 
 // sends message which triggers removal of node
 function removeViaMessage(node) {
+  console.log('removeViaMessage:', node);
   window.postMessage({
     type: 'removeNode',
     node: processNode(node),

@@ -29,6 +29,9 @@ export const pathStore = writable({
 });
 
 export function reload() {
+  console.log(
+    'store has reloaded, sent message to background script to reload'
+  );
   backgroundPageConnection.postMessage({
     type: 'RELOAD',
     tabId: devtools.inspectedWindow.tabId,
