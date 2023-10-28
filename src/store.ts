@@ -2,9 +2,6 @@ import { writable, get } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 import type { Message, Node, SnapShot, Difference } from './types';
 import { write } from 'fs';
-const { devtools, runtime } = chrome;
-
-console.log('in store.ts');
 
 const nodeMap = new Map();
 export const rootNodes: Writable<Node[]> = writable([]);
@@ -19,12 +16,18 @@ export const connected = writable(false);
 //     getConnected();
 //   }
 // });
+function Message(
+  action: 'connect' | 'message contentScript' | 'message serviceWorker',
+  body: string | number
+) {
+  this.action = action;
+  this.body = body;
+  this.source = 'extension';
+}
 
 // DevTools page -- devtools.js
 // Create a connection to the background page
-const serviceWorkerConnection = chrome.runtime.connect({
-  name: 'devtools-page',
-});
+const serviceWorkerConnection = chrome.runtime.connect();
 
 serviceWorkerConnection.onMessage.addListener(function (message) {
   // Handle responses from the service worker
@@ -32,9 +35,13 @@ serviceWorkerConnection.onMessage.addListener(function (message) {
 });
 
 // Relay the tab ID to the background page
-serviceWorkerConnection.postMessage({
-  tabId: chrome.devtools.inspectedWindow.tabId,
-});
+serviceWorkerConnection.postMessage(
+  new Message('connect', chrome.devtools.inspectedWindow.tabId)
+);
+
+serviceWorkerConnection.postMessage(
+  new Message('message contentScript', 'hello from the extension')
+);
 
 // runtime.onConnect.addListener(function (port) {
 //   console.log(port, 'connected in the store.ts');
