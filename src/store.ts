@@ -39,8 +39,13 @@ serviceWorkerConnection.postMessage(
   new Message('connect', chrome.devtools.inspectedWindow.tabId)
 );
 
-serviceWorkerConnection.postMessage(
-  new Message('message contentScript', 'hello from the extension')
+//set timeout to delay messages until connection with serviceWorker has been setup
+setTimeout(
+  () =>
+    serviceWorkerConnection.postMessage(
+      new Message('message contentScript', 'hello from the extension')
+    ),
+  0
 );
 
 // runtime.onConnect.addListener(function (port) {

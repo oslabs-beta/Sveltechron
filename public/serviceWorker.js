@@ -10,6 +10,7 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
       case 'connect':
         //expose tabId and port info to service worker and content script connection
         tabId = message.body;
+        console.log(message, tabId);
         port = extensionPort;
         // Inject a content script into the identified tab
         chrome.scripting.executeScript({
@@ -19,6 +20,7 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
         break;
       case 'message contentScript':
         //relay message from extension to contentScript
+        console.log('tabId', tabId);
         chrome.tabs.sendMessage(tabId, message);
 
         break;
