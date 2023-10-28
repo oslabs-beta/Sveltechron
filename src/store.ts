@@ -1,123 +1,149 @@
 import { writable, get } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 import type { Message, Node, SnapShot, Difference } from './types';
+import { write } from 'fs';
 const { devtools, runtime } = chrome;
+
+console.log('in store.ts');
 
 const nodeMap = new Map();
 export const rootNodes: Writable<Node[]> = writable([]);
-export const snapShotHistory: Writable<SnapShot[]> = writable([]);
 export const selected: Writable<SnapShot> = writable(null);
-export const skipArr: Writable<number[]> = writable([]);
-export const currentSnapShot: Writable<number> = writable(0);
-let shaveCounter: number = 0;
-
-//we want to dynamically add to treeData
 export const treeData = writable({});
+export const connected = writable(false);
+// Create a connection to the service worker
 
-// switch between tree and time travel panels
-export const pathStore = writable({
-  path: 'tree',
-  setPath: () => {
-    pathStore.update((state) => {
-      if (state.path === 'tree') {
-        return { ...state, path: 'time' };
-      } else {
-        return { ...state, path: 'tree' };
-      }
-    });
-  },
+// connected.subscribe((value) => {
+//   console.log('connected:', get(connected));
+//   if (value) {
+//     getConnected();
+//   }
+// });
+
+// DevTools page -- devtools.js
+// Create a connection to the background page
+const backgroundPageConnection = chrome.runtime.connect({
+  name: 'devtools-page',
 });
 
-export function reload() {
-  console.log(
-    'store has reloaded, sent message to background script to reload'
-  );
-  backgroundPageConnection.postMessage({
-    type: 'RELOAD',
-    tabId: devtools.inspectedWindow.tabId,
-  });
-}
+backgroundPageConnection.onMessage.addListener(function (message) {
+  // Handle responses from the background page, if any
+  console.log('message received in store.ts:', message);
+});
+
+// Relay the tab ID to the background page
+backgroundPageConnection.postMessage({
+  tabId: chrome.devtools.inspectedWindow.tabId,
+  scriptToInject: 'content_script.js',
+});
+
+// runtime.onConnect.addListener(function (port) {
+//   console.log(port, 'connected in the store.ts');
+//   port.onMessage.addListener(function (msg) {
+//     console.log('message received in store.ts:', msg);
+//   });
+// });
+
+// chrome.runtime.onConnect.addListener(function (port) {
+//   console.assert(port.name === 'knockknock');
+//   console.assert(port.name === 'store');
+//   port.onMessage.addListener(function (msg) {
+//     console.log('message received in the serviceWorker:', msg);
+//     if (msg.joke === 'Knock knock')
+//       port.postMessage({ question: "Who's there?2" });
+//     else if (msg.answer === 'Madame')
+//       port.postMessage({ question: 'Madame who?2' });
+//     else if (msg.answer === 'Madame... Bovary')
+//       port.postMessage({ question: "I don't get it.2" });
+//   });
+// });
+
+// export function reload() {
+//   backgroundPageConnection.postMessage({
+//     type: 'RELOAD',
+//     tabId: devtools.inspectedWindow.tabId,
+//   });
 // ================================================================================
 //              MESSAGING
 // ================================================================================
 
-// establish connection
-const backgroundPageConnection = runtime.connect();
+// // establish connection
+// const backgroundPageConnection = runtime.connect();
 
-// message background with tabID
-backgroundPageConnection.postMessage({
-  type: 'INIT',
-  tabId: devtools.inspectedWindow.tabId,
-});
+// // message background with tabID
+// backgroundPageConnection.postMessage({
+//   type: 'INIT',
+//   tabId: devtools.inspectedWindow.tabId,
+// });
 
-// listen for messages from background
-backgroundPageConnection.onMessage.addListener((message: Message) => {
-  switch (message.type) {
-    // used when refreshing page or disconnecting
-    case 'clear': {
-      rootNodes.set([]);
-      break;
-    }
+// // listen for messages from background
+// backgroundPageConnection.onMessage.addListener((message: Message) => {
+//   console.log('this is the message:', message);
+//   switch (message.type) {
+//     // used when refreshing page or disconnecting
+//     case 'clear': {
+//       rootNodes.set([]);
+//       break;
+//     }
 
-    // add nodes to the nodeMap
-    case 'addNode': {
-      const node: Node = message.node;
-      node.children = [];
-      // node.collapsed = true;
-      node.invalidate = noop;
+//     // add nodes to the nodeMap
+//     case 'addNode': {
+//       console.log('nodeAdded, message:', message);
+//       const node: Node = message.node;
+//       node.children = [];
+//       // node.collapsed = true;
+//       node.invalidate = noop;
 
-      const targetNode = nodeMap.get(message.target);
-      nodeMap.set(node.id, node);
+//       const targetNode = nodeMap.get(message.target);
+//       nodeMap.set(node.id, node);
 
-      if (targetNode) {
-        insertNode(node, targetNode, message.anchor);
-        return;
-      }
+//       if (targetNode) {
+//         insertNode(node, targetNode, message.anchor);
+//         return;
+//       }
 
-      if (node._timeout) return;
+//       if (node._timeout) return;
 
-      node._timeout = setTimeout(() => {
-        delete node._timeout;
-        const targetNode = nodeMap.get(message.target);
-        if (targetNode) insertNode(node, targetNode, message.anchor);
-        else {
-          node.tagName = 'Root';
-          rootNodes.set([node]);
-        }
-      }, 100);
+//       node._timeout = setTimeout(() => {
+//         delete node._timeout;
+//         const targetNode = nodeMap.get(message.target);
+//         if (targetNode) insertNode(node, targetNode, message.anchor);
+//         else {
+//           node.tagName = 'Root';
+//           rootNodes.set([node]);
+//         }
+//       }, 100);
 
-      break;
-    }
+//       break;
+//     }
 
-    // update nodes within the nodeMap
-    case 'updateNode': {
-      const node = nodeMap.get(message.node.id);
+//     // update nodes within the nodeMap
+//     case 'updateNode': {
+//       const node = nodeMap.get(message.node.id);
 
-      addSnapShot(node, message);
+//       Object.assign(node, message.node);
 
-      Object.assign(node, message.node);
+//       node.invalidate();
 
-      node.invalidate();
+//       break;
+//     }
 
-      break;
-    }
+//     // remove nodes from the nodeMap
+//     case 'removeNode': {
+//       const node = nodeMap.get(message.node.id);
+//       nodeMap.delete(node.id);
 
-    // remove nodes from the nodeMap
-    case 'removeNode': {
-      const node = nodeMap.get(message.node.id);
-      nodeMap.delete(node.id);
+//       if (!node.parent) break;
 
-      if (!node.parent) break;
+//       const index = node.parent.children.findIndex((obj) => obj.id == node.id);
+//       node.parent.children.splice(index, 1);
 
-      const index = node.parent.children.findIndex((obj) => obj.id == node.id);
-      node.parent.children.splice(index, 1);
+//       node.parent.invalidate();
 
-      node.parent.invalidate();
-
-      break;
-    }
-  }
-});
+//       break;
+//     }
+//   }
+// });
 
 // ================================================================================
 //
@@ -140,56 +166,11 @@ function insertNode(node: Node, target: Node, anchorId: number): void {
 
 function noop() {}
 
-// adds a snapshot of the components state and difference to an array of all our state changes (history)
-function addSnapShot(prevNode, message) {
-  const { node } = message;
-  if (
-    node.type === 'component' &&
-    node.tagName !== 'Root' &&
-    node.tagName !== 'Unknown'
-  ) {
-    const differences: Array<Difference> = [];
-    compareObjects(prevNode.detail.ctx, node.detail.ctx, differences);
-    if (differences.length && !shaveCounter) {
-      node.diff = differences;
-      node._id = get(snapShotHistory).length;
-      snapShotHistory.update((prev) => [...prev, node]);
-      currentSnapShot.set(get(snapShotHistory).length - 1);
-    }
-    if (shaveCounter) --shaveCounter;
-  }
-}
-
-function compareObjects(
-  node1: Node,
-  node2: Node,
-  differences: any[] = [],
-  path: string[] = []
-) {
-  for (const key in node1) {
-    if (typeof node1[key] === 'function') {
-      continue; // Ignore functions
-    }
-
-    if (typeof node1[key] === 'object' && typeof node2[key] === 'object') {
-      const newPath = [...path, key];
-      compareObjects(node1[key], node2[key], differences, newPath); // Recursively compare nested objects
-    } else {
-      if (node1[key] !== node2[key]) {
-        differences.push({
-          id: differences.length,
-          path: [...path, key],
-          value1: node1[key],
-          value2: node2[key],
-        }); // Add the difference to the array
-      }
-    }
-  }
-}
-
 // function takes as input a ctx array and returns a processed ctx without functions
 export function process_ctx(ctx_array: any[]): any[] {
   // helper function that returns boolean based on if the element contains a function
+
+  console.log('ctx_array:', ctx_array);
   function hasFunction(obj) {
     if (typeof obj !== 'object' || obj === null) {
       return false;
@@ -214,50 +195,6 @@ export function process_ctx(ctx_array: any[]): any[] {
   for (let i = 0; i < ctx_array.length; i++) {
     if (!hasFunction(ctx_array[i])) processed_ctx.push(ctx_array[i]);
   }
+  console.log('processed_ctx', processed_ctx);
   return processed_ctx;
-}
-
-// this function is used to jump to the user selected slice of time in state history
-// iterate through the history array from the current snapshot backwards to the desired snapshot
-// as we iterate through, undo the state changes from slice to slice
-export function jump(snapshotID) {
-  // counter that indicates how many elements to shave off the history array as we are adding unnecessary events by jumping
-  shaveCounter = 0;
-
-  // going backwards in time
-  if (get(currentSnapShot) > snapshotID) {
-    for (let i = get(currentSnapShot) - 1; i >= snapshotID; i--) {
-      if (get(skipArr).includes(i)) {
-        continue;
-      }
-      ++shaveCounter;
-      const component_id = get(snapShotHistory)[i].id;
-      const targetState = get(snapShotHistory)[i].detail.ctx;
-      const JSONd_state = JSON.stringify(targetState).replaceAll('\\', '\\\\');
-      devtools.inspectedWindow.eval(
-        `window.SVOLTE_INJECT_STATE(${component_id}, '${JSONd_state}')`,
-        (result, error) => console.log('result is ', result, 'error is ', error)
-      );
-    }
-  }
-
-  // going forwards in time
-  else if (get(currentSnapShot) < snapshotID) {
-    for (let i = get(currentSnapShot) + 1; i <= snapshotID; i++) {
-      if (get(skipArr).includes(i)) {
-        continue;
-      }
-      ++shaveCounter;
-      const component_id = get(snapShotHistory)[i].id;
-      const targetState = get(snapShotHistory)[i].detail.ctx;
-      const JSONd_state = JSON.stringify(targetState).replaceAll('\\', '\\\\');
-      devtools.inspectedWindow.eval(
-        `window.SVOLTE_INJECT_STATE(${component_id}, '${JSONd_state}')`,
-        (result, error) => console.log('result is ', result, 'error is ', error)
-      );
-    }
-  }
-
-  //set our current place in time to where we just traveled to
-  currentSnapShot.set(snapshotID);
 }

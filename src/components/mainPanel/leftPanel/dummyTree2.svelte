@@ -3,6 +3,10 @@
   import { treeData, rootNodes, process_ctx } from '../../../store';
   import { onMount, afterUpdate } from 'svelte';
 
+  // console.log('treeData:', treeData);
+  // console.log('rootNodes:', rootNodes);
+  // console.log('process_ctx:', process_ctx);
+
   let shouldWait = false;
   const treeColors = {
     childrenHidden: '#A0FFA1',
@@ -227,6 +231,7 @@
       d3.select(this.parentNode).select('text').style('opacity', 1);
       const currentNodeId = Number(this.parentNode.id);
       d3.selectAll('g.node').each(function () {
+        console.log('this:', this);
         const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
@@ -246,7 +251,7 @@
       d3.select(this.parentNode).select('rect').style('opacity', 0);
       const currentNodeId = Number(this.parentNode.id);
       d3.selectAll('g.node').each(function () {
-        // const nodeId = this.id;
+        const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
           d3.select(this).style('opacity', 1);

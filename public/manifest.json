@@ -5,13 +5,7 @@
   "description": "Browser devtools extension for debugging Svelte applications.",
   "content_scripts": [
     {
-      "world": "MAIN",
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["contentMain.js"],
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["https://*/*", "http://*/*"],
+      "matches": ["<all_urls>"],
       "js": ["contentIsolated.js"],
       "run_at": "document_start"
     }

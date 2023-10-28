@@ -11,7 +11,7 @@ export interface Node {
   children: Array<Node> | any[];
   parent: Node | null;
   invalidate?: () => void;
-  _timeout?: any;
+  _timeout?: number;
   tagName: string;
   type: string;
   detail?: {
