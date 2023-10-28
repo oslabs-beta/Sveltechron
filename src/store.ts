@@ -22,19 +22,18 @@ export const connected = writable(false);
 
 // DevTools page -- devtools.js
 // Create a connection to the background page
-const backgroundPageConnection = chrome.runtime.connect({
+const serviceWorkerConnection = chrome.runtime.connect({
   name: 'devtools-page',
 });
 
-backgroundPageConnection.onMessage.addListener(function (message) {
-  // Handle responses from the background page, if any
+serviceWorkerConnection.onMessage.addListener(function (message) {
+  // Handle responses from the service worker
   console.log('message received in store.ts:', message);
 });
 
 // Relay the tab ID to the background page
-backgroundPageConnection.postMessage({
+serviceWorkerConnection.postMessage({
   tabId: chrome.devtools.inspectedWindow.tabId,
-  scriptToInject: 'content_script.js',
 });
 
 // runtime.onConnect.addListener(function (port) {

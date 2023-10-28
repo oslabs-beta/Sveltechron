@@ -1,19 +1,21 @@
 // background.js
 
 console.log('service worker fired');
-
+//let tabId and port be accessible for port connection between service worker and extension (store.ts) as well as service worker to content script connection
 let tabId;
 let port;
-// Background page -- background.js
+// setup connection between service worker and extension (store.ts)
 chrome.runtime.onConnect.addListener(function (devToolsConnection) {
   // assign the listener function to a variable so we can remove it later
   var devToolsListener = function (message) {
     // Inject a content script into the identified tab
     console.log('message received in the service worker:', message);
-
+    //expose tabId and port info to service worker and content script connection
     tabId = message.tabId;
     port = devToolsConnection;
     console.log('this the tabId', tabId);
+
+    //send message to extension (store.ts)
     devToolsConnection.postMessage(
       'back at ya from the serviceWorker postMessage'
     );
@@ -28,14 +30,19 @@ chrome.runtime.onConnect.addListener(function (devToolsConnection) {
 });
 
 chrome.runtime.onMessage.addListener(function (message) {
+  //see if tabId and port are still defined within the context of this function
   console.log(
     'this the tabId when the message is sent',
     tabId,
     'and this is the port',
     port
   );
+
+  //receive messages sent from the content script
   console.log('this is a message sent from the content script:', message);
+  //relayed message from content script to devtools page
   port.postMessage('relayed message from the content script', message);
+  //send message from service worker to content script
   chrome.tabs.sendMessage(
     tabId,
     'this is a message sent from the service worker'

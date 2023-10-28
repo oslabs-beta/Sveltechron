@@ -7,12 +7,15 @@
 
 console.log('contentIso fired');
 
+//added this so that message won't fire before service worker loaded listeners -> next step is to programatically inject content script from service worker
 window.addEventListener('dblclick', () => {
   console.log('dblclick');
+  //sends message to service worker on dblclick
   chrome.runtime.sendMessage('sendMessage worked in iso');
 });
 
 chrome.runtime.onMessage.addListener((message) => {
+  //listens to messages from content script
   console.log('this is a message received in the content script:', message);
 });
 
