@@ -12,23 +12,21 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
         tabId = message.body;
         console.log(message, tabId);
         port = extensionPort;
-        // Inject a content script into the identified tab
+        // Inject content scripts into the identified tab
         chrome.scripting.executeScript({
           target: { tabId: tabId },
-          files: ['contentScript.js'],
+          files: ['contentMain.js'],
+          world: 'MAIN',
         });
-        break;
-      case 'message contentScript':
-        //relay message from extension to contentScript
-        console.log('tabId', tabId);
-        chrome.tabs.sendMessage(tabId, message);
-
+        chrome.scripting.executeScript({
+          target: { tabId: tabId },
+          files: ['contentIsolated.js'],
+        });
+        port.postMessage('successfully connected');
         break;
       default:
-        console.log(
-          'error occurred relaying message to the content script in the service worker:',
-          message
-        );
+        //relay message from extension to contentScript
+        chrome.tabs.sendMessage(tabId, message);
     }
   };
   // inject the listener on receiving a message
@@ -42,21 +40,22 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
 
 // Relays messages from content script to the extension (store.ts)
 chrome.runtime.onMessage.addListener(function (message) {
-  switch (message.destination) {
-    case 'extension':
-      port.postMessage(
-        `relayed message from the content script: ${JSON.stringify(message)}`
-      );
-      break;
-    case 'serviceWorker':
-      console.log(
-        `received message from the content script: ${JSON.stringify(message)}`
-      );
-      break;
-    default:
-      console.log(
-        'error occurred relaying message to the extension in the service worker:',
-        JSON.stringify(message)
-      );
-  }
+  port.postMessage(message);
+  // switch (message.destination) {
+  //   case 'extension':
+  //     port.postMessage(
+  //       `relayed message from the content script: ${JSON.stringify(message)}`
+  //     );
+  //     break;
+  //   case 'serviceWorker':
+  //     console.log(
+  //       `received message from the content script: ${JSON.stringify(message)}`
+  //     );
+  //     break;
+  //   default:
+  //     console.log(
+  //       'error occurred relaying message to the extension in the service worker:',
+  //       JSON.stringify(message)
+  //     );
+  // }
 });

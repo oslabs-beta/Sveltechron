@@ -1,11 +1,8 @@
 <script>
   import * as d3 from 'd3';
-  import { treeData, rootNodes, process_ctx } from '../../../store';
+  import { treeData, rootNodes } from '../../../store';
+  import process_ctx from '../../connect/connect.svelte';
   import { onMount, afterUpdate } from 'svelte';
-
-  // console.log('treeData:', treeData);
-  // console.log('rootNodes:', rootNodes);
-  // console.log('process_ctx:', process_ctx);
 
   let shouldWait = false;
   const treeColors = {
@@ -41,9 +38,11 @@
     const output = {};
     output.name = root.tagName;
     if (root.detail.ctx) {
+      // @ts-ignore
       output.variables = process_ctx(root.detail.ctx);
     }
     if (root.detail.attributes) {
+      // @ts-ignore
       output.props = process_ctx(root.detail.attributes);
     }
 
@@ -56,6 +55,7 @@
   if ($rootNodes[0]) {
     const parsedData = rootParser($rootNodes[0]);
     treeData.set(parsedData);
+    treeData.subscribe((data) => console.log('this is the treeData:', data));
   }
 
   let margin = { top: 20, right: 90, bottom: 20, left: 90 };
@@ -73,6 +73,7 @@
   let counter = 0;
 
   function update(source) {
+    // @ts-ignore
     const treeData = treeLayout(root);
 
     // nodes
@@ -90,6 +91,7 @@
       .attr('class', 'node')
       .attr(
         'transform',
+        // @ts-ignore
         (d) => 'translate(' + source.y0 + ', ' + source.x0 + ')'
       )
       .attr('id', () => `${counter++}`)
@@ -110,6 +112,7 @@
     const gSVG = nodeEnter.append('g').attr('transform', 'translate(-6, 4)');
 
     //adding component name to each node
+    // @ts-ignore
     const text = nodeEnter
       .append('text')
       .attr('dy', '.35em')
@@ -119,6 +122,7 @@
       .text((d) => d.data.name)
       .style('fill', 'aliceblue');
 
+    // @ts-ignore
     const rect = gSVG
       .append('rect')
       .attr('width', (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
@@ -147,7 +151,9 @@
       .style('word-wrap', 'break-word')
       .style('font-family', 'Arial');
 
+    // @ts-ignore
     circleSVG.on('mouseover', function (event, d) {
+      // @ts-ignore
       let str = '';
       let textLength = 0;
       let varTextContent = '';
@@ -228,10 +234,11 @@
       // d3.selectAll('text').style('opacity', 0);
 
       d3.select(this).style('opacity', 1);
-      d3.select(this.parentNode).select('text').style('opacity', 1);
+      d3.select(this.parentNode).select('text').style('o dpacity', 1);
       const currentNodeId = Number(this.parentNode.id);
       d3.selectAll('g.node').each(function () {
         console.log('this:', this);
+        // @ts-ignore
         const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
@@ -240,6 +247,7 @@
       });
     });
 
+    // @ts-ignore
     circleSVG.on('mouseout', function (event, d) {
       //handling text bug
 
@@ -251,6 +259,7 @@
       d3.select(this.parentNode).select('rect').style('opacity', 0);
       const currentNodeId = Number(this.parentNode.id);
       d3.selectAll('g.node').each(function () {
+        // @ts-ignore
         const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
@@ -273,6 +282,7 @@
       .exit()
       .transition()
       .duration(duration)
+      // @ts-ignore
       .attr('transform', (d) => 'translate(' + source.y + ',' + source.x + ')')
       .remove();
 
@@ -294,6 +304,7 @@
       .enter()
       .insert('path', 'g')
       .attr('class', 'link')
+      // @ts-ignore
       .attr('d', (d) => {
         let o = { x: source.x0, y: source.y };
         return diagonal(o, o);
@@ -309,10 +320,12 @@
       .duration(duration)
       .attr('d', (d) => diagonal(d, d.parent));
 
+    // @ts-ignore
     const linkExit = link
       .exit()
       .transition()
       .duration(duration)
+      // @ts-ignore
       .attr('d', (d) => {
         let o = { x: source.x, y: source.y };
         return diagonal(o, o);
@@ -321,22 +334,27 @@
 
     // store old positions to be able to transition back
     nodes.forEach((d) => {
+      // @ts-ignore
       d.x0 = d.x;
+      // @ts-ignore
       d.y0 = d.y;
     });
 
     // define click function
+    // @ts-ignore
     function click(event, d) {
       if (shouldWait) return;
 
       if (d.children) {
         d._children = d.children;
         d.children = null;
+        // @ts-ignore
         d3.select(this)._groups[0][0].querySelector('circle').style.fill =
           '#A0FFA1';
       } else {
         d.children = d._children;
         d._children = null;
+        // @ts-ignore
         d3.select(this)._groups[0][0].querySelector('circle').style.fill =
           '#A0FFFE';
       }
@@ -360,15 +378,19 @@
     used to construct a root node data from a given hierarchial data
     data MUST be of an object and represent a root node
     returns an array of object(s) */
+    // @ts-ignore
     root = d3.hierarchy($treeData, (d) => d.children);
     root.each((d) => {
       if (d.children) {
         d.children.forEach((child, i) => {
+          // @ts-ignore
           child.data.originalOrder = i;
         });
       }
     });
+    // @ts-ignore
     root.x0 = height / 2;
+    // @ts-ignore
     root.y0 = 0;
     if ($treeData) {
       svg = d3
