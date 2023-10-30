@@ -1,4 +1,5 @@
 <script>
+  // @ts-nocheck
   import * as d3 from 'd3';
   import { treeData, rootNodes } from '../../../store';
   import process_ctx from '../../connect/connect.svelte';
@@ -41,6 +42,7 @@
     const output = {};
     output.name = root.tagName;
     if (root.detail.ctx) {
+      console.log('this is the root.detail:', root.detail);
       // @ts-ignore
       output.variables = process_ctx(root.detail.ctx);
     }
