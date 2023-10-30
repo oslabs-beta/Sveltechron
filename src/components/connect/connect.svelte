@@ -16,10 +16,13 @@
     const connection = chrome.runtime.connect();
 
     connection.onMessage.addListener(function (message) {
+      console.log('this is a message received in the connect.svelte:', message);
       if (message === 'successfully connected') {
         connected.set(true);
       } else {
-        switch (message.type) {
+        // const parsedMessage = JSON.parse(message);
+        const parsedMessage = message;
+        switch (parsedMessage.type) {
           // used when refreshing page or disconnecting
           case 'clear': {
             rootNodes.set([]);
@@ -28,16 +31,17 @@
 
           // add nodes to the nodeMap
           case 'addNode': {
-            const node = message.node;
+            // console.log('received a parsedMessage trying to add a node:', parsedMessage);
+            const node = parsedMessage.node;
             node.children = [];
             // node.collapsed = true;
             node.invalidate = noop;
 
-            const targetNode = nodeMap.get(message.target);
+            const targetNode = nodeMap.get(parsedMessage.target);
             nodeMap.set(node.id, node);
 
             if (targetNode) {
-              insertNode(node, targetNode, message.anchor);
+              insertNode(node, targetNode, parsedMessage.anchor);
               return;
             }
 
@@ -45,8 +49,9 @@
 
             node._timeout = setTimeout(() => {
               delete node._timeout;
-              const targetNode = nodeMap.get(message.target);
-              if (targetNode) insertNode(node, targetNode, message.anchor);
+              const targetNode = nodeMap.get(parsedMessage.target);
+              if (targetNode)
+                insertNode(node, targetNode, parsedMessage.anchor);
               else {
                 node.tagName = 'Root';
                 rootNodes.set([node]);
@@ -58,9 +63,10 @@
 
           // update nodes within the nodeMap
           case 'updateNode': {
-            const node = nodeMap.get(message.node.id);
+            // console.log('received a parsedMessage trying to updateNode:', parsedMessage);
+            const node = nodeMap.get(parsedMessage.node.id);
 
-            Object.assign(node, message.node);
+            Object.assign(node, parsedMessage.node);
 
             node.invalidate();
 
@@ -69,7 +75,8 @@
 
           // remove nodes from the nodeMap
           case 'removeNode': {
-            const node = nodeMap.get(message.node.id);
+            // console.log('received a parsedMessage trying to removeNode:', parsedMessage);
+            const node = nodeMap.get(parsedMessage.node.id);
             nodeMap.delete(node.id);
 
             if (!node.parent) break;

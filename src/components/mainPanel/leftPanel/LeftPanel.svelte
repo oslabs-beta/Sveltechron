@@ -1,9 +1,14 @@
 <script lang="ts">
   import DummyTree2 from './dummyTree2.svelte';
   import { onMount } from 'svelte';
+  let timeOver = false;
+
+  setTimeout(() => (timeOver = !timeOver), 1000);
 </script>
 
-<div class="container"><DummyTree2 /></div>
+{#if timeOver}
+  <div class="container"><DummyTree2 /></div>
+{/if}
 
 <style>
   .container {

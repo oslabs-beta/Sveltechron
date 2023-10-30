@@ -20,7 +20,7 @@ function addViaMessage(node) {
     target: node.parent ? node.parent.id : null,
     type: 'addNode',
     node: processNode(node),
-    source: 'contentMain.js',
+    source: 'content.js',
   });
 }
 
@@ -29,7 +29,7 @@ function updateViaMessage(node) {
   window.postMessage({
     type: 'updateNode',
     node: processNode(node),
-    source: 'contentMain.js',
+    source: 'content.js',
   });
 }
 
@@ -38,7 +38,7 @@ function removeViaMessage(node) {
   window.postMessage({
     type: 'removeNode',
     node: processNode(node),
-    source: 'contentMain.js',
+    source: 'content.js',
   });
 }
 

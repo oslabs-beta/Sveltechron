@@ -12,6 +12,9 @@
     linkStroke: '#FCFFAE',
   };
 
+  treeData.subscribe((val) => console.log('treeData:', val));
+  rootNodes.subscribe((val) => console.log('rootNodes:', val));
+
   /* states and locally defined variables are in ctx property
   props from a parent component are in attributes property */
 
@@ -53,9 +56,10 @@
   }
 
   if ($rootNodes[0]) {
+    console.log('$rootNodes:', $rootNodes);
     const parsedData = rootParser($rootNodes[0]);
+    console.log('this is the parsedData:', parsedData);
     treeData.set(parsedData);
-    treeData.subscribe((data) => console.log('this is the treeData:', data));
   }
 
   let margin = { top: 20, right: 90, bottom: 20, left: 90 };
@@ -126,6 +130,7 @@
     const rect = gSVG
       .append('rect')
       .attr('width', (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
+      // .attr('width', (d) => console.log(d))
       .attr('height', (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
       .attr('fill', '#F5F5F5')
       .style('opacity', 0)
@@ -378,6 +383,7 @@
     used to construct a root node data from a given hierarchial data
     data MUST be of an object and represent a root node
     returns an array of object(s) */
+    console.log('$treeData', $treeData);
     // @ts-ignore
     root = d3.hierarchy($treeData, (d) => d.children);
     root.each((d) => {

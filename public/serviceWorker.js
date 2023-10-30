@@ -26,6 +26,10 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
         break;
       default:
         //relay message from extension to contentScript
+        console.log(
+          'this is the message received in the serviceWorker:',
+          message
+        );
         chrome.tabs.sendMessage(tabId, message);
     }
   };
@@ -40,6 +44,10 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
 
 // Relays messages from content script to the extension (store.ts)
 chrome.runtime.onMessage.addListener(function (message) {
+  // console.log(
+  //   'this is the message being received in the service Worker:',
+  //   message
+  // );
   port.postMessage(message);
   // switch (message.destination) {
   //   case 'extension':
