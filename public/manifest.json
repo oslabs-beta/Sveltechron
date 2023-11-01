@@ -8,6 +8,17 @@
     "service_worker": "serviceWorker.js",
     "run_at": "document_start"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentMAIN.js"],
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentIsolated.js"]
+    }
+  ],
   "devtools_page": "devtools.html",
   "permissions": ["scripting", "activeTab"],
   "host_permissions": ["<all_urls>"]

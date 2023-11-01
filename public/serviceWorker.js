@@ -10,19 +10,20 @@ chrome.runtime.onConnect.addListener(function (extensionPort) {
       case 'connect':
         //expose tabId and port info to service worker and content script connection
         tabId = message.body;
-        console.log(message, tabId);
         port = extensionPort;
-        // Inject content scripts into the identified tab
-        chrome.scripting.executeScript({
-          target: { tabId: tabId },
-          files: ['contentMain.js'],
-          world: 'MAIN',
+        // // Inject content scripts into the identified tab
+        // chrome.scripting.executeScript({
+        //   target: { tabId: tabId },
+        //   files: ['contentMain.js'],
+        //   world: 'MAIN',
+        // });
+        // chrome.scripting.executeScript({
+        //   target: { tabId: tabId },
+        //   files: ['contentIsolated.js'],
+        // });
+        chrome.tabs.reload(tabId, () => {
+          port.postMessage('successfully connected');
         });
-        chrome.scripting.executeScript({
-          target: { tabId: tabId },
-          files: ['contentIsolated.js'],
-        });
-        port.postMessage('successfully connected');
         break;
       default:
         //relay message from extension to contentScript
