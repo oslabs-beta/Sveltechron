@@ -117,35 +117,6 @@
 
     function noop() {}
   };
-  // function takes as input a ctx array and returns a processed ctx without functions
-  export function process_ctx(ctx_array: any[]): any[] {
-    // helper function that returns boolean based on if the element contains a function
-    function hasFunction(obj) {
-      if (typeof obj !== 'object' || obj === null) {
-        return false;
-      }
-
-      if (obj.__isFunction) {
-        return true;
-      }
-
-      for (const key in obj) {
-        if (typeof obj[key] === 'function' || hasFunction(obj[key])) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    // new array to hold processed ctx elements
-    const processed_ctx = [];
-
-    // iterate through the given ctx array and check for functions
-    for (let i = 0; i < ctx_array.length; i++) {
-      if (!hasFunction(ctx_array[i])) processed_ctx.push(ctx_array[i]);
-    }
-    return processed_ctx;
-  }
 </script>
 
 <div>

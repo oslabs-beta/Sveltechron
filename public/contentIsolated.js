@@ -20,6 +20,6 @@ window.addEventListener('message', (msg) => {
   }
 });
 
-window.addEventListener('unload', () =>
-  chrome.runtime.sendMessage({ type: 'clear' })
-);
+// window.addEventListener('unload', () =>
+//   chrome.runtime.sendMessage({ type: 'clear' })
+// );

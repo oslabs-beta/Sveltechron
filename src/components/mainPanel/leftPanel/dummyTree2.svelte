@@ -2,7 +2,6 @@
   // @ts-nocheck
   import * as d3 from 'd3';
   import { treeData, rootNodes } from '../../../store';
-  import process_ctx from '../../connect/connect.svelte';
   import { onMount, afterUpdate } from 'svelte';
 
   let shouldWait = false;
@@ -39,6 +38,7 @@
   function rootParser(root) {
     // root is an object
     // output is an object
+    console.log('this is the root passed in:', root);
     const output = {};
     output.name = root.tagName;
     if (root.detail.ctx) {
@@ -58,7 +58,7 @@
   }
 
   if ($rootNodes[0]) {
-    console.log('$rootNodes:', $rootNodes);
+    console.log('$rootNodes in the conditional:', $rootNodes);
     const parsedData = rootParser($rootNodes[0]);
     console.log('this is the parsedData:', parsedData);
     treeData.set(parsedData);
@@ -421,6 +421,36 @@
       update(root);
     }
   });
+
+  // function takes as input a ctx array and returns a processed ctx without functions
+  function process_ctx(ctx_array) {
+    // helper function that returns boolean based on if the element contains a function
+    function hasFunction(obj) {
+      if (typeof obj !== 'object' || obj === null) {
+        return false;
+      }
+
+      if (obj.__isFunction) {
+        return true;
+      }
+
+      for (const key in obj) {
+        if (typeof obj[key] === 'function' || hasFunction(obj[key])) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // new array to hold processed ctx elements
+    const processed_ctx = [];
+
+    // iterate through the given ctx array and check for functions
+    for (let i = 0; i < ctx_array.length; i++) {
+      if (!hasFunction(ctx_array[i])) processed_ctx.push(ctx_array[i]);
+    }
+    return processed_ctx;
+  }
 </script>
 
 <main id="body" style="overflow: auto;" />
