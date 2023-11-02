@@ -1,19 +1,19 @@
 <script>
   // @ts-nocheck
-  import * as d3 from 'd3';
-  import { treeData, rootNodes } from '../../../store';
-  import { onMount, afterUpdate } from 'svelte';
+  import * as d3 from "d3";
+  import { treeData, rootNodes } from "../../../store";
+  import { onMount, afterUpdate } from "svelte";
 
   let shouldWait = false;
   const treeColors = {
-    childrenHidden: '#A0FFA1',
-    childrenShown: '#A0FFFE',
-    leafNode: '#D6B0FF',
-    linkStroke: '#FCFFAE',
+    childrenHidden: "#black",
+    childrenShown: "black",
+    leafNode: "green",
+    linkStroke: "black",
   };
 
-  treeData.subscribe((val) => console.log('treeData:', val));
-  rootNodes.subscribe((val) => console.log('rootNodes:', val));
+  treeData.subscribe((val) => console.log("treeData:", val));
+  // rootNodes.subscribe((val) => console.log("rootNodes:", val));
 
   /* states and locally defined variables are in ctx property
   props from a parent component are in attributes property */
@@ -26,7 +26,7 @@
   function nodeTraverse(arr, childrenArr = []) {
     if (arr.length === 0) return;
     for (let node of arr) {
-      if (node.type === 'component') childrenArr.push(rootParser(node));
+      if (node.type === "component") childrenArr.push(rootParser(node));
       else {
         nodeTraverse(node.children, childrenArr);
       }
@@ -38,11 +38,11 @@
   function rootParser(root) {
     // root is an object
     // output is an object
-    console.log('this is the root passed in:', root);
+    console.log("this is the root passed in:", root);
     const output = {};
     output.name = root.tagName;
     if (root.detail.ctx) {
-      console.log('this is the root.detail:', root.detail);
+      console.log("this is the root.detail:", root.detail);
       // @ts-ignore
       output.variables = process_ctx(root.detail.ctx);
     }
@@ -58,18 +58,18 @@
   }
 
   if ($rootNodes[0]) {
-    console.log('$rootNodes in the conditional:', $rootNodes);
+    console.log("$rootNodes in the conditional:", $rootNodes);
     const parsedData = rootParser($rootNodes[0]);
-    console.log('this is the parsedData:', parsedData);
+    console.log("this is the parsedData:", parsedData);
     treeData.set(parsedData);
   }
 
   let margin = { top: 20, right: 90, bottom: 20, left: 90 };
-  let width = 960 - margin.left - margin.right;
-  let height = 600 - margin.top - margin.bottom;
+  let width = 600 - margin.left - margin.right;
+  let height = 960 - margin.top - margin.bottom;
 
   // create a tidy tree layout with specified size [height, width]
-  const treeLayout = d3.tree().size([height, width]);
+  const treeLayout = d3.tree().size([width, height]);
 
   // transition duration
   let i = 0;
@@ -87,90 +87,100 @@
     nodes.forEach((d) => (d.y = d.depth * 150));
 
     const node = svg
-      .selectAll('g.node')
+      .selectAll("g.node")
       .data(nodes, (d) => d.id || (d.id = ++i));
 
     //attaching a circle to represent each node
     const nodeEnter = node
       .enter()
-      .append('g')
-      .attr('class', 'node')
+      .append("g")
+      .attr("class", "node")
       .attr(
-        'transform',
-        // @ts-ignore
-        (d) => 'translate(' + source.y0 + ', ' + source.x0 + ')'
+        "transform",
+        (d) => "translate(" + d.y + ", " + d.x + ")" // Swap d.x and d.y
       )
-      .attr('id', () => `${counter++}`)
-      .on('click', click);
+      // .attr(
+      //   "transform",
+      //   (d) => "translate(" + source.x0 + ", " + source.y0 + ")"
+      // )
+      .attr("id", () => `${counter++}`)
+      .on("click", click);
 
     const circleSVG = nodeEnter
-      .append('circle')
-      .attr('r', 8)
-      .style('fill', (d) =>
+      .append("circle")
+      .attr("r", 8)
+      .style("fill", (d) =>
         d.children
           ? treeColors.childrenShown
           : d._children
           ? treeColors.childrenHidden
           : treeColors.leafNode
       )
-      .attr('cursor', 'pointer');
+      .attr("cursor", "pointer");
 
-    const gSVG = nodeEnter.append('g').attr('transform', 'translate(-6, 4)');
+    const gSVG = nodeEnter.append("g").attr("transform", "translate(-6, 4)");
 
     //adding component name to each node
     // @ts-ignore
+    // const text = nodeEnter
+    //   .append("text")
+    //   .attr("dy", ".35em")
+    //   .attr("y", (d) => (d.children || d._children ? -20 : 0))
+    //   .attr("x", 14)
+    //   .attr("text-anchor", (d) => (d.children || d._children ? "end" : "start"))
+    //   .text((d) => d.data.name)
+    //   .style("fill", "black");
     const text = nodeEnter
-      .append('text')
-      .attr('dy', '.35em')
-      .attr('y', (d) => (d.children || d._children ? -20 : 0))
-      .attr('x', 14)
-      .attr('text-anchor', (d) => (d.children || d._children ? 'end' : 'start'))
+      .append("text")
+      .attr("dy", ".35em")
+      .attr("y", 0) // Adjust the y position if needed
+      .attr("x", (d) => (d.children || d._children ? 10 : -10)) // Adjust the x position
+      .attr("text-anchor", (d) => (d.children || d._children ? "start" : "end")) // Adjust the text-anchor
       .text((d) => d.data.name)
-      .style('fill', 'aliceblue');
-
+      .style("fill", "black");
     // @ts-ignore
     const rect = gSVG
-      .append('rect')
-      .attr('width', (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
+      .append("rect")
+      .attr("width", (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
       // .attr('width', (d) => console.log(d))
-      .attr('height', (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
-      .attr('fill', '#F5F5F5')
-      .style('opacity', 0)
-      .attr('rx', 10)
-      .attr('ry', 10);
+      .attr("height", (d) => `${((d.data.name.length * 81) / 945) * 100}vh`)
+      .attr("fill", "#F5F5F5")
+      .style("opacity", 0)
+      .attr("rx", 10)
+      .attr("ry", 10);
 
     const enterSVG = gSVG
-      .append('foreignObject')
-      .attr('width', (d) => `${((d.data.name.length * 80 + 10) / 945) * 100}vh`)
+      .append("foreignObject")
+      .attr("width", (d) => `${((d.data.name.length * 80 + 10) / 945) * 100}vh`)
       .attr(
-        'height',
+        "height",
         (d) => `${((d.data.name.length * 80 + 10) / 945) * 100}vh`
       );
 
     const textDiv = enterSVG
-      .append('xhtml:div')
-      .style('font-size', '15px')
-      .style('overflow-wrap', 'anywhere')
-      .style('color', 'black')
+      .append("xhtml:div")
+      .style("font-size", "15px")
+      .style("overflow-wrap", "anywhere")
+      .style("color", "black")
       .text((d) => d.data.name)
-      .style('opacity', 0)
-      .attr('class', 'wrapped-text')
-      .style('word-wrap', 'break-word')
-      .style('font-family', 'Arial');
+      .style("opacity", 0)
+      .attr("class", "wrapped-text")
+      .style("word-wrap", "break-word")
+      .style("font-family", "Arial");
 
     // @ts-ignore
-    circleSVG.on('mouseover', function (event, d) {
+    circleSVG.on("mouseover", function (event, d) {
       // @ts-ignore
-      let str = '';
+      let str = "";
       let textLength = 0;
-      let varTextContent = '';
-      let propTextContent = '';
+      let varTextContent = "";
+      let propTextContent = "";
       let elCounter = 0;
       if (d.data.variables) elCounter += 2;
       for (const el of d.data.variables) {
-        if (typeof el.value === 'object') {
+        if (typeof el.value === "object") {
           for (const [key, value] of Object.entries(el.value)) {
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
               // textLength += value.length;
               textLength = Math.max(
                 textLength,
@@ -191,9 +201,9 @@
         }
       }
       for (const el of d.data.props) {
-        if (typeof el.value === 'object') {
+        if (typeof el.value === "object") {
           for (const [key, value] of Object.entries(el.value)) {
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
               // textLength += value.length;
               textLength = Math.max(
                 textLength,
@@ -215,62 +225,62 @@
       }
 
       d3.select(this.parentNode)
-        .select('foreignObject')
-        .select('div')
-        .style('opacity', 1)
-        .style('padding', '10px 5px 15px 15px')
+        .select("foreignObject")
+        .select("div")
+        .style("opacity", 1)
+        .style("padding", "10px 5px 15px 15px")
         .html(`Variables<hr>${varTextContent}Props<hr>${propTextContent}`);
       const rectWidth = Math.ceil(textLength * 12);
       const rectHeight = Math.ceil(elCounter * 35);
-      textDiv.style('width', `${(rectWidth / 945) * 100}vh`);
-      textDiv.style('height', `${((rectHeight * 0.9) / 945) * 100}vh`);
+      textDiv.style("width", `${(rectWidth / 945) * 100}vh`);
+      textDiv.style("height", `${((rectHeight * 0.9) / 945) * 100}vh`);
       d3.select(this.parentNode)
-        .select('rect')
-        .attr('width', `${(rectWidth / 945) * 100}vh`);
+        .select("rect")
+        .attr("width", `${(rectWidth / 945) * 100}vh`);
       d3.select(this.parentNode)
-        .select('rect')
-        .attr('height', `${(rectHeight / 945) * 110}vh`);
+        .select("rect")
+        .attr("height", `${(rectHeight / 945) * 110}vh`);
       d3.select(this.parentNode)
-        .select('foreignObject')
-        .attr('width', `${((textLength * 10.5) / 945) * 100}vh`);
-      d3.select(this.parentNode).select('rect').style('opacity', 1);
+        .select("foreignObject")
+        .attr("width", `${((textLength * 10.5) / 945) * 100}vh`);
+      d3.select(this.parentNode).select("rect").style("opacity", 1);
       //handling text bug
 
       //older solution, makes all other nodes clear
       // d3.selectAll('circle').style('opacity', 0);
       // d3.selectAll('text').style('opacity', 0);
 
-      d3.select(this).style('opacity', 1);
-      d3.select(this.parentNode).select('text').style('o dpacity', 1);
+      d3.select(this).style("opacity", 1);
+      d3.select(this.parentNode).select("text").style("o dpacity", 1);
       const currentNodeId = Number(this.parentNode.id);
-      d3.selectAll('g.node').each(function () {
-        console.log('this:', this);
+      d3.selectAll("g.node").each(function () {
+        console.log("this:", this);
         // @ts-ignore
         const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
-          d3.select(this).style('opacity', 0);
+          d3.select(this).style("opacity", 0);
         }
       });
     });
 
     // @ts-ignore
-    circleSVG.on('mouseout', function (event, d) {
+    circleSVG.on("mouseout", function (event, d) {
       //handling text bug
 
       //rest of code handling foreign object of current element's opacity
       d3.select(this.parentNode)
-        .select('foreignObject')
-        .select('div')
-        .style('opacity', 0);
-      d3.select(this.parentNode).select('rect').style('opacity', 0);
+        .select("foreignObject")
+        .select("div")
+        .style("opacity", 0);
+      d3.select(this.parentNode).select("rect").style("opacity", 0);
       const currentNodeId = Number(this.parentNode.id);
-      d3.selectAll('g.node').each(function () {
+      d3.selectAll("g.node").each(function () {
         // @ts-ignore
         const nodeId = this.id;
         const nodeNumber = Number(nodeId);
         if (nodeNumber > currentNodeId) {
-          d3.select(this).style('opacity', 1);
+          d3.select(this).style("opacity", 1);
         }
       });
     });
@@ -280,9 +290,9 @@
     nodeUpdate
       .transition()
       .duration(duration)
-      .attr('transform', (d) => 'translate(' + d.y + ', ' + d.x + ')')
-      .select('circle.node')
-      .attr('r', 8);
+      .attr("transform", (d) => `translate(${d.x},${d.y})`)
+      .select("circle.node")
+      .attr("r", 8);
     // .style('fill', d => d._children ? "yellow" : "black")
 
     const nodeExit = node
@@ -290,42 +300,49 @@
       .transition()
       .duration(duration)
       // @ts-ignore
-      .attr('transform', (d) => 'translate(' + source.y + ',' + source.x + ')')
+      .attr("transform", (d) => "translate(" + source.y + "," + source.x + ")")
       .remove();
 
-    nodeExit.select('circle').attr('r', 0);
-    nodeExit.select('text').style('fill-opacity', 0);
+    nodeExit.select("circle").attr("r", 0);
+    nodeExit.select("text").style("fill-opacity", 0);
 
-    // links
+    // links;
+    // function diagonal(s, d) {
+    //   let path = `M ${s.y} ${s.x}
+    //     C ${(s.y + d.y) / 2} ${s.x}
+    //       ${(s.y + d.y) / 2} ${d.x}
+    //       ${d.y} ${d.x}`;
+    //   return path;
+    // }
     function diagonal(s, d) {
-      let path = `M ${s.y} ${s.x}
-        C ${(s.y + d.y) / 2} ${s.x}
-          ${(s.y + d.y) / 2} ${d.x}
-          ${d.y} ${d.x}`;
+      let path = `M ${s.x} ${s.y}
+      L ${d.x} ${d.y}`;
       return path;
     }
 
     let links = treeData.descendants().slice(1);
-    let link = svg.selectAll('path.link').data(links, (d) => d.id);
+    let link = svg.selectAll("path.link").data(links, (d) => d.id);
     const linkEnter = link
       .enter()
-      .insert('path', 'g')
-      .attr('class', 'link')
-      // @ts-ignore
-      .attr('d', (d) => {
-        let o = { x: source.x0, y: source.y };
-        return diagonal(o, o);
+      .insert("path", "g")
+      .attr("class", "link")
+      .attr("d", (d) => {
+        return `
+      M ${d.y},${d.x}
+      C ${(d.y + d.parent.y) / 2},${d.x}
+      ${(d.y + d.parent.y) / 2},${d.parent.x}
+      ${d.parent.y},${d.parent.x}`;
       })
-      .style('opacity', '0.9')
-      .style('stroke', '#FCFFAE')
-      .style('stroke-width', '3px')
-      .style('fill', 'none');
+      .style("opacity", "0.9")
+      .style("stroke", "black")
+      .style("stroke-width", "1px")
+      .style("fill", "none");
 
     const linkUpdate = linkEnter.merge(link);
     linkUpdate
       .transition()
       .duration(duration)
-      .attr('d', (d) => diagonal(d, d.parent));
+      .attr("d", (d) => diagonal(d, d.parent));
 
     // @ts-ignore
     const linkExit = link
@@ -333,7 +350,7 @@
       .transition()
       .duration(duration)
       // @ts-ignore
-      .attr('d', (d) => {
+      .attr("d", (d) => {
         let o = { x: source.x, y: source.y };
         return diagonal(o, o);
       })
@@ -341,10 +358,9 @@
 
     // store old positions to be able to transition back
     nodes.forEach((d) => {
-      // @ts-ignore
-      d.x0 = d.x;
-      // @ts-ignore
-      d.y0 = d.y;
+      const temp = d.x;
+      d.x = d.y;
+      d.y = temp;
     });
 
     // define click function
@@ -356,14 +372,14 @@
         d._children = d.children;
         d.children = null;
         // @ts-ignore
-        d3.select(this)._groups[0][0].querySelector('circle').style.fill =
-          '#A0FFA1';
+        d3.select(this)._groups[0][0].querySelector("circle").style.fill =
+          "#A0FFA1";
       } else {
         d.children = d._children;
         d._children = null;
         // @ts-ignore
-        d3.select(this)._groups[0][0].querySelector('circle').style.fill =
-          '#A0FFFE';
+        d3.select(this)._groups[0][0].querySelector("circle").style.fill =
+          "#A0FFFE";
       }
 
       // throttle
@@ -385,7 +401,7 @@
     used to construct a root node data from a given hierarchial data
     data MUST be of an object and represent a root node
     returns an array of object(s) */
-    console.log('$treeData', $treeData);
+    console.log("$treeData", $treeData);
     // @ts-ignore
     root = d3.hierarchy($treeData, (d) => d.children);
     root.each((d) => {
@@ -402,14 +418,14 @@
     root.y0 = 0;
     if ($treeData) {
       svg = d3
-        .select('#body')
-        .append('svg')
-        .attr('width', width + margin.right + margin.left)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
+        .select("#body")
+        .append("svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
         .attr(
-          'transform',
-          'translate(' + margin.left + ', ' + margin.top + ')'
+          "transform",
+          "translate(" + margin.left + ", " + margin.top + ")"
         );
 
       update(root);
@@ -426,7 +442,7 @@
   function process_ctx(ctx_array) {
     // helper function that returns boolean based on if the element contains a function
     function hasFunction(obj) {
-      if (typeof obj !== 'object' || obj === null) {
+      if (typeof obj !== "object" || obj === null) {
         return false;
       }
 
@@ -435,7 +451,7 @@
       }
 
       for (const key in obj) {
-        if (typeof obj[key] === 'function' || hasFunction(obj[key])) {
+        if (typeof obj[key] === "function" || hasFunction(obj[key])) {
           return true;
         }
       }
