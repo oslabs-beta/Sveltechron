@@ -1,27 +1,22 @@
 <script>
   // @ts-nocheck
   import * as d3 from "d3";
-  import { treeData, rootNodes } from "../../../store";
+  import {
+    treeData,
+    rootNodes,
+    propsNodeCont,
+    stateNodeCont,
+    hasBeenChanged,
+  } from "../../../store";
   import { onMount, afterUpdate } from "svelte";
 
   let shouldWait = false;
   const treeColors = {
-    childrenHidden: "#black",
+    childrenHidden: "black",
     childrenShown: "black",
-    leafNode: "green",
+    leafNode: "black",
     linkStroke: "black",
   };
-
-  treeData.subscribe((val) => console.log("treeData:", val));
-  // rootNodes.subscribe((val) => console.log("rootNodes:", val));
-
-  /* states and locally defined variables are in ctx property
-  props from a parent component are in attributes property */
-
-  /* iterates through children array of each node, if a child is a component then 
-  calls rootParser on that component to add it as a child object to the parent node's children array.
-  If not a component, continues down branch until it reaches a component or a node with no children.
-  */
 
   function nodeTraverse(arr, childrenArr = []) {
     if (arr.length === 0) return;
@@ -170,98 +165,79 @@
 
     // @ts-ignore
     circleSVG.on("mouseover", function (event, d) {
-      // @ts-ignore
-      let str = "";
-      let textLength = 0;
-      let varTextContent = "";
-      let propTextContent = "";
-      let elCounter = 0;
-      if (d.data.variables) elCounter += 2;
-      for (const el of d.data.variables) {
-        if (typeof el.value === "object") {
-          for (const [key, value] of Object.entries(el.value)) {
-            if (typeof value === "string") {
-              // textLength += value.length;
-              textLength = Math.max(
-                textLength,
-                `${el.value}`.length + `${el.key}`.length
-              );
-              varTextContent += `${key} — ${value}<br>`;
-              elCounter += 1;
-            }
-          }
-        } else {
-          // textLength += `${el.value}`.length;
-          textLength = Math.max(
-            textLength,
-            `${el.value}`.length + `${el.key}`.length
-          );
-          varTextContent += `${el.key}: ${el.value}<br>`;
-          elCounter += 1;
+      console.log("this is d", d);
+      const stateArr = [];
+      const propsArr = [];
+      if (d.data.variables) {
+        for (const el of d.data.variables) {
+          stateArr.push(el);
         }
+        console.log("this is d.data.variables", d.data.variables);
       }
-      for (const el of d.data.props) {
-        if (typeof el.value === "object") {
-          for (const [key, value] of Object.entries(el.value)) {
-            if (typeof value === "string") {
-              // textLength += value.length;
-              textLength = Math.max(
-                textLength,
-                `${el.value}`.length + `${el.key}`.length
-              );
-              propTextContent += `${key} — ${value}<br>`;
-              elCounter += 1;
-            }
-          }
-        } else {
-          // textLength += `${el.value}`.length;
-          textLength = Math.max(
-            textLength,
-            `${el.value}`.length + `${el.key}`.length
-          );
-          propTextContent += `${el.key}: ${el.value}<br>`;
-          elCounter += 1;
+      if (d.data.props) {
+        for (const el of d.data.props) {
+          propsArr.push(el);
         }
+        console.log("this is d.data.props", d.data.props);
       }
-
-      d3.select(this.parentNode)
-        .select("foreignObject")
-        .select("div")
-        .style("opacity", 1)
-        .style("padding", "10px 5px 15px 15px")
-        .html(`Variables<hr>${varTextContent}Props<hr>${propTextContent}`);
-      const rectWidth = Math.ceil(textLength * 12);
-      const rectHeight = Math.ceil(elCounter * 35);
-      textDiv.style("width", `${(rectWidth / 945) * 100}vh`);
-      textDiv.style("height", `${((rectHeight * 0.9) / 945) * 100}vh`);
-      d3.select(this.parentNode)
-        .select("rect")
-        .attr("width", `${(rectWidth / 945) * 100}vh`);
-      d3.select(this.parentNode)
-        .select("rect")
-        .attr("height", `${(rectHeight / 945) * 110}vh`);
-      d3.select(this.parentNode)
-        .select("foreignObject")
-        .attr("width", `${((textLength * 10.5) / 945) * 100}vh`);
-      d3.select(this.parentNode).select("rect").style("opacity", 1);
-      //handling text bug
-
-      //older solution, makes all other nodes clear
-      // d3.selectAll('circle').style('opacity', 0);
-      // d3.selectAll('text').style('opacity', 0);
-
-      d3.select(this).style("opacity", 1);
-      d3.select(this.parentNode).select("text").style("o dpacity", 1);
-      const currentNodeId = Number(this.parentNode.id);
-      d3.selectAll("g.node").each(function () {
-        console.log("this:", this);
-        // @ts-ignore
-        const nodeId = this.id;
-        const nodeNumber = Number(nodeId);
-        if (nodeNumber > currentNodeId) {
-          d3.select(this).style("opacity", 0);
-        }
-      });
+      const hasBeenChanged2 = !$hasBeenChanged;
+      stateNodeCont.set(stateArr);
+      propsNodeCont.set(propsArr);
+      hasBeenChanged.set(hasBeenChanged2);
+      // // @ts-ignore
+      // let str = "";
+      // let textLength = 0;
+      // let varTextContent = "";
+      // let propTextContent = "";
+      // let elCounter = 0;
+      // if (d.data.variables) elCounter += 2;
+      // for (const el of d.data.variables) {
+      //   if (typeof el.value === "object") {
+      //     for (const [key, value] of Object.entries(el.value)) {
+      //       if (typeof value === "string") {
+      //         // textLength += value.length;
+      //         textLength = Math.max(
+      //           textLength,
+      //           `${el.value}`.length + `${el.key}`.length
+      //         );
+      //         varTextContent += `${key} — ${value}<br>`;
+      //         elCounter += 1;
+      //       }
+      //     }
+      //   } else {
+      //     // textLength += `${el.value}`.length;
+      //     textLength = Math.max(
+      //       textLength,
+      //       `${el.value}`.length + `${el.key}`.length
+      //     );
+      //     varTextContent += `${el.key}: ${el.value}<br>`;
+      //     elCounter += 1;
+      //   }
+      // }
+      // for (const el of d.data.props) {
+      //   if (typeof el.value === "object") {
+      //     for (const [key, value] of Object.entries(el.value)) {
+      //       if (typeof value === "string") {
+      //         // textLength += value.length;
+      //         textLength = Math.max(
+      //           textLength,
+      //           `${el.value}`.length + `${el.key}`.length
+      //         );
+      //         propTextContent += `${key} — ${value}<br>`;
+      //         elCounter += 1;
+      //       }
+      //     }
+      //   } else {
+      //     // textLength += `${el.value}`.length;
+      //     textLength = Math.max(
+      //       textLength,
+      //       `${el.value}`.length + `${el.key}`.length
+      //     );
+      //     propTextContent += `${el.key}: ${el.value}<br>`;
+      //     elCounter += 1;
+      //   }
+      // }
+      console.log("state and props in tree", $stateNodeCont, $propsNodeCont);
     });
 
     // @ts-ignore
@@ -373,13 +349,13 @@
         d.children = null;
         // @ts-ignore
         d3.select(this)._groups[0][0].querySelector("circle").style.fill =
-          "#A0FFA1";
+          "black";
       } else {
         d.children = d._children;
         d._children = null;
         // @ts-ignore
         d3.select(this)._groups[0][0].querySelector("circle").style.fill =
-          "#A0FFFE";
+          "black";
       }
 
       // throttle
