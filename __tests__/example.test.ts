@@ -1,7 +1,7 @@
 //these must be imported each time
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
-import Options from '../src/components/Options.svelte';
+import Options from '../src/components/App.svelte';
 
 describe('Options.svelte', () => {
   /**

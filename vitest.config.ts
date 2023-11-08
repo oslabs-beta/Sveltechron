@@ -1,8 +1,8 @@
-import {defineConfig} from 'vitest/config'
-import {svelte} from '@sveltejs/vite-plugin-svelte'
+import { defineConfig } from 'vitest/config';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 export default defineConfig({
-  plugins: [svelte({hot: !process.env.VITEST})],
+  plugins: [svelte({ hot: !process.env.VITEST })],
   test: {
     /**
      * @author Jay Kura
@@ -14,4 +14,4 @@ export default defineConfig({
     //using the jsdom implementation because it's a js implementation of many web standards, creates a browser-like environment for testing
     environment: 'jsdom',
   },
-})
+});
