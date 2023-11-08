@@ -1,18 +1,49 @@
 <script lang="ts" type="module">
+  import { stateNodeCont, propsNodeCont, hasBeenChanged } from "../../../store";
 </script>
 
 <div>
   <div id="state-container">
     <h3>State</h3>
-    <p>deleteAppt: <span>function deleteAppt()</span></p>
-    <p>updateAppt: <span>function updateAppt()</span></p>
+    {#if ($hasBeenChanged = true)}
+      {#each $stateNodeCont as { key, value }}
+        {#if typeof value !== "object"}
+          <p>{key}: <span>{value}</span></p>
+        {:else}
+          <p>{key}: <span>{JSON.stringify(value)}</span></p>
+        {/if}
+      {/each}
+    {/if}
+    {#if ($hasBeenChanged = false)}
+      {#each $stateNodeCont as { key, value }}
+        {#if typeof value !== "object"}
+          <p>{key}: <span>{value}</span></p>
+        {:else}
+          <p>{key}: <span>{JSON.stringify(value)}</span></p>
+        {/if}
+      {/each}
+    {/if}
   </div>
   <div id="props-container">
     <h3>Props</h3>
-    <p>apptName: <span>Lecture: System Design</span></p>
-    <p>time: <span>2:30PM</span></p>
-    <p>completed:<span>false</span></p>
-    <p>apptID:<span>54646546</span></p>
+    {#if ($hasBeenChanged = true)}
+      {#each $propsNodeCont as { key, value }}
+        {#if typeof value !== "object"}
+          <p>{key}: <span>{value}</span></p>
+        {:else}
+          <p>{key}: <span>{JSON.stringify(value)}</span></p>
+        {/if}
+      {/each}
+    {/if}
+    {#if ($hasBeenChanged = false)}
+      {#each $propsNodeCont as { key, value }}
+        {#if typeof value !== "object"}
+          <p>{key}: <span>{value}</span></p>
+        {:else}
+          <p>{key}: <span>{JSON.stringify(value)}</span></p>
+        {/if}
+      {/each}
+    {/if}
   </div>
 </div>
 

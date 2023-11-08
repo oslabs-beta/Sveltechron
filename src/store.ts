@@ -6,3 +6,6 @@ export const rootNodes: Writable<Node[]> = writable([]);
 export const selected: Writable<SnapShot> = writable(null);
 export const treeData = writable({});
 export const connected = writable(false);
+export const stateNodeCont = writable([]);
+export const propsNodeCont = writable([]);
+export const hasBeenChanged = writable(false);
