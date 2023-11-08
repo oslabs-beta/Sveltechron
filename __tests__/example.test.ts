@@ -3,6 +3,25 @@ import { fireEvent, render, screen } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
 import Options from '../src/components/App.svelte';
 
+global.chrome = {
+  runtime: {
+    connect: jest.fn(() => ({
+      onMessage: {
+        addListener: jest.fn((callback) => {
+          // You can simulate a successful connection message here
+          callback('successfully connected');
+        }),
+      },
+      postMessage: jest.fn(),
+    })),
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: '123', // Mock tab ID
+    },
+  },
+};
+
 describe('Options.svelte', () => {
   /**
    * @author Jay Kura
@@ -28,4 +47,22 @@ describe('Options.svelte', () => {
     await fireEvent.click(minusButton);
     expect(count).toHaveTextContent('Current count: 9');
   });
+  test('devtools successfully connect to the app', async () => {
+    // Render your component
+    render(Options);
+
+    // Simulate the click on the 'Connect' button
+    const connectButton = screen.getByText('Connect');
+    await fireEvent.click(connectButton);
+
+    // Check if the connect method has been called
+    expect(chrome.runtime.connect).toHaveBeenCalled();
+
+    // Check if a message for a successful connection has been sent
+    expect(chrome.runtime.connect().postMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: 'connect',
+        body: chrome.devtools.inspectedWindow.tabId,
+      })
+    );
 });
