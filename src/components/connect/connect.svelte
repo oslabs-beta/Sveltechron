@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { rootNodes, connected } from '../../store';
+  import { rootNodes, connected } from "../../store";
 
   function Message(
-    action: 'connect' | 'message contentScript' | 'message serviceWorker',
+    action: "connect" | "message contentScript" | "message serviceWorker",
     body: string | number
   ) {
     this.action = action;
     this.body = body;
-    this.source = 'extension';
+    this.source = "extension";
   }
   const nodeMap = new Map();
 
@@ -16,21 +16,21 @@
     const connection = chrome.runtime.connect();
 
     connection.onMessage.addListener(function (message) {
-      console.log('this is a message received in the connect.svelte:', message);
-      if (message === 'successfully connected') {
+      console.log("this is a message received in the connect.svelte:", message);
+      if (message === "successfully connected") {
         connected.set(true);
       } else {
         // const parsedMessage = JSON.parse(message);
         const parsedMessage = message;
         switch (parsedMessage.type) {
           // used when refreshing page or disconnecting
-          case 'clear': {
+          case "clear": {
             rootNodes.set([]);
             break;
           }
 
           // add nodes to the nodeMap
-          case 'addNode': {
+          case "addNode": {
             // console.log('received a parsedMessage trying to add a node:', parsedMessage);
             const node = parsedMessage.node;
             node.children = [];
@@ -53,7 +53,7 @@
               if (targetNode)
                 insertNode(node, targetNode, parsedMessage.anchor);
               else {
-                node.tagName = 'Root';
+                node.tagName = "Root";
                 rootNodes.set([node]);
               }
             }, 100);
@@ -62,7 +62,7 @@
           }
 
           // update nodes within the nodeMap
-          case 'updateNode': {
+          case "updateNode": {
             // console.log('received a parsedMessage trying to updateNode:', parsedMessage);
             const node = nodeMap.get(parsedMessage.node.id);
 
@@ -74,7 +74,7 @@
           }
 
           // remove nodes from the nodeMap
-          case 'removeNode': {
+          case "removeNode": {
             // console.log('received a parsedMessage trying to removeNode:', parsedMessage);
             const node = nodeMap.get(parsedMessage.node.id);
             nodeMap.delete(node.id);
@@ -96,7 +96,7 @@
 
     // Relay the tab ID to the service worker and initiate connect event
     connection.postMessage(
-      new Message('connect', chrome.devtools.inspectedWindow.tabId)
+      new Message("connect", chrome.devtools.inspectedWindow.tabId)
     );
 
     function insertNode(node, target, anchorId: number): void {
