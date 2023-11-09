@@ -1,6 +1,6 @@
-import { writable, get } from 'svelte/store';
+import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import type { Message, Node, SnapShot, Difference } from './types';
+import type { Node, SnapShot } from './types';
 
 export const rootNodes: Writable<Node[]> = writable([]);
 export const selected: Writable<SnapShot> = writable(null);
