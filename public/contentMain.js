@@ -1,5 +1,3 @@
-console.log('contentMain successfully injected');
-
 // store all the nodes in a map
 const nodeMap = new Map();
 
