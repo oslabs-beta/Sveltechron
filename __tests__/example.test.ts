@@ -66,3 +66,4 @@ describe('Options.svelte', () => {
       })
     );
 });
+

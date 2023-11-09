@@ -1,5 +1,3 @@
-console.log("contentMain successfully injected");
-
 // store all the nodes in a map
 const nodeMap = new Map();
 
@@ -12,27 +10,24 @@ let _id = 0;
 function addNodeByMessage(node) {
   window.postMessage({
     target: node.parent ? node.parent.id : null,
-    type: "addNode",
+    type: 'addNode',
     node: processNode(node),
-    source: "content.js",
   });
 }
 
 // update node by sending a message
 function updateNodeByMessage(node) {
   window.postMessage({
-    type: "updateNode",
+    type: 'updateNode',
     node: processNode(node),
-    source: "content.js",
   });
 }
 
 // delete node by sending message
 function deleteNodeByMessage(node) {
   window.postMessage({
-    type: "removeNode",
+    type: 'removeNode',
     node: processNode(node),
-    source: "content.js",
   });
 }
 
@@ -48,7 +43,7 @@ function extractNode(node) {
 
   //check for component type node or text type node
   switch (node.type) {
-    case "component": {
+    case 'component': {
       if (!node.detail.$$) {
         extractedDetails.detail = {};
         break;
@@ -78,7 +73,7 @@ function extractNode(node) {
       break;
     }
 
-    case "element": {
+    case 'element': {
       const element = node.detail;
       extractedDetails.detail = {
         attributes: Array.from(element.attributes).map((attr) => ({
@@ -100,11 +95,11 @@ function extractNode(node) {
 
 function multiCloner(value, seen = new Map()) {
   switch (typeof value) {
-    case "function":
+    case 'function':
       return { __isFunction: true, source: value.toString(), name: value.name };
-    case "symbol":
+    case 'symbol':
       return { __isSymbol: true, name: value.toString() };
-    case "object":
+    case 'object':
       if (value === window || value === null) return null;
       if (Array.isArray(value))
         return value.map((obj) => multiCloner(obj, seen));
@@ -163,10 +158,10 @@ function insertNodeToDOM(element, target, anchor) {
     id: _id++,
     type:
       element.nodeType == 1
-        ? "element"
-        : element.nodeValue && element.nodeValue != " "
-        ? "text"
-        : "anchor",
+        ? 'element'
+        : element.nodeValue && element.nodeValue != ' '
+        ? 'text'
+        : 'anchor',
     detail: element,
     tagName: element.nodeName.toLowerCase(),
     parentBlock: currentBlock,
@@ -185,7 +180,7 @@ function removeNodeFromDOM(node) {
   nodeMap.delete(node.id);
   nodeMap.delete(node.detail);
 
-  console.log("this is the node:", node);
+  console.log('this is the node:', node);
   const index = node.parent.children.indexOf(node);
   node.parent.children.splice(index, 1);
   node.parent = null;
@@ -199,9 +194,8 @@ let currentBlock;
 
 function blockRegistration(e) {
   const { type, id, block, ...detail } = e.detail;
-  const tagName = type == "pending" ? "await" : type;
+  const tagName = type == 'pending' ? 'await' : type;
   const nodeId = _id++;
-  const tagName = type == "pending" ? "await" : type;
 
   function updateProfile(node, type, fn, ...args) {
     fn(...args);
@@ -213,7 +207,7 @@ function blockRegistration(e) {
       const parentBlock = currentBlock;
       let node = {
         id: nodeId,
-        type: "block",
+        type: 'block',
         detail,
         tagName,
         parentBlock,
@@ -221,24 +215,24 @@ function blockRegistration(e) {
       };
 
       switch (type) {
-        case "then":
-        case "catch":
+        case 'then':
+        case 'catch':
           if (!node.parentBlock) node.parentBlock = lastPromiseParent;
           break;
 
-        case "slot":
-          node.type = "slot";
+        case 'slot':
+          node.type = 'slot';
           break;
 
-        case "component":
+        case 'component':
           const componentNode = nodeMap.get(block);
           if (componentNode) {
             nodeMap.delete(block);
             Object.assign(node, componentNode);
           } else {
             Object.assign(node, {
-              type: "component",
-              tagName: "Unknown",
+              type: 'component',
+              tagName: 'Unknown',
               detail: {},
             });
             nodeMap.set(block, node);
@@ -253,17 +247,17 @@ function blockRegistration(e) {
           break;
       }
 
-      if (type == "each") {
+      if (type == 'each') {
         let group = nodeMap.get(parentBlock.id + id);
         if (!group) {
           group = {
             id: _id++,
-            type: "block",
+            type: 'block',
             detail: {
               ctx: {},
               source: detail.source,
             },
-            tagName: "each",
+            tagName: 'each',
             parentBlock,
             children: [],
           };
@@ -271,14 +265,14 @@ function blockRegistration(e) {
           addNodeToDOM(group, target, anchor);
         }
         node.parentBlock = group;
-        node.type = "iteration";
+        node.type = 'iteration';
         addNodeToDOM(node, group, anchor);
       } else {
         addNodeToDOM(node, target, anchor);
       }
 
       currentBlock = node;
-      updateProfile(node, "mount", mountFn, target, anchor);
+      updateProfile(node, 'mount', mountFn, target, anchor);
       currentBlock = parentBlock;
     };
   }
@@ -289,7 +283,7 @@ function blockRegistration(e) {
       const parentBlock = currentBlock;
       currentBlock = nodeMap.get(nodeId);
       updateNodeByMessage(currentBlock);
-      updateProfile(currentBlock, "patch", patchFn, changed, ctx);
+      updateProfile(currentBlock, 'patch', patchFn, changed, ctx);
       currentBlock = parentBlock;
     };
   }
@@ -300,10 +294,10 @@ function blockRegistration(e) {
       const node = nodeMap.get(nodeId);
 
       if (node) {
-        if (node.tagName == "await") lastPromiseParent = node.parentBlock;
+        if (node.tagName == 'await') lastPromiseParent = node.parentBlock;
         removeNodeFromDOM(node);
       }
-      updateProfile(node, "detach", detachFn, detach);
+      updateProfile(node, 'detach', detachFn, detach);
     };
   }
 }
@@ -325,7 +319,7 @@ function registerSvelteComponent(event) {
     updateNodeByMessage(node);
   } else {
     nodeMap.set(component.$$.fragment, {
-      type: "component",
+      type: 'component',
       detail: component,
       tagName,
     });
@@ -350,7 +344,7 @@ function svelteSetDOMData(event) {
   const node = nodeMap.get(event.detail.node);
   if (!node) return;
 
-  if (node.type == "anchor") node.type = "text";
+  if (node.type == 'anchor') node.type = 'text';
 
   updateNodeByMessage(node);
 }
@@ -358,11 +352,11 @@ function svelteSetDOMData(event) {
 //******************* SVELTECHRON, ROLL OUT!!! **************************************
 
 function INITIATE_SVELTECHRON(root) {
-  root.addEventListener("SvelteRegisterBlock", blockRegistration);
-  root.addEventListener("SvelteRegisterComponent", registerSvelteComponent);
-  root.addEventListener("SvelteDOMInsert", svelteInsertDOM);
-  root.addEventListener("SvelteDOMSetData", svelteSetDOMData);
-  root.addEventListener("SvelteDOMRemove", svelteRemoveDOM);
+  root.addEventListener('SvelteRegisterBlock', blockRegistration);
+  root.addEventListener('SvelteRegisterComponent', registerSvelteComponent);
+  root.addEventListener('SvelteDOMInsert', svelteInsertDOM);
+  root.addEventListener('SvelteDOMSetData', svelteSetDOMData);
+  root.addEventListener('SvelteDOMRemove', svelteRemoveDOM);
 }
 
 INITIATE_SVELTECHRON(window.document);
