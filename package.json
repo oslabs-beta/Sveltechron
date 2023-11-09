@@ -1,0 +1,32 @@
+{
+  "type": "module",
+  "dependencies": {
+    "d3": "^7.8.4",
+    "path": "^0.12.7"
+  },
+  "name": "sveltechron",
+  "description": "dev tools for svelte (OSP)",
+  "version": "1.0.0",
+  "main": "./src/main.ts",
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.3",
+    "@testing-library/svelte": "^4.0.4",
+    "@tsconfig/svelte": "^4.0.1",
+    "@types/chrome": "^0.0.250",
+    "jsdom": "^22.1.0",
+    "prettier": "2.8.8",
+    "prettier-plugin-svelte": "^2.10.1",
+    "svelte": "^3.57.0",
+    "svelte-check": "^2.10.3",
+    "svelte-preprocess": "^5.0.4",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vitest": "^0.34.6"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest"
+  }
+}
