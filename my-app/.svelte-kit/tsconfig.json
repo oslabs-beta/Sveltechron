@@ -28,6 +28,7 @@
 	"include": [
 		"ambient.d.ts",
 		"./types/**/$types.d.ts",
+		"../vite.config.js",
 		"../vite.config.ts",
 		"../src/**/*.js",
 		"../src/**/*.ts",
