@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { rootNodes, connected } from '../../store';
+  import { rootNodes, connected } from "../../store";
 
   const nodeMap = new Map();
 
@@ -9,19 +9,19 @@
 
     // Relay the tab ID to the service worker and initiate connect event
     connection.postMessage({
-      action: 'connect',
+      action: "connect",
       body: chrome.devtools.inspectedWindow.tabId,
     });
 
     connection.onMessage.addListener(function (message) {
       //listen for message from serviceWorker
-      if (message === 'successfully connected') {
+      if (message === "successfully connected") {
         //so that the main panel can conditionally render
         connected.set(true);
       } else {
         switch (message.type) {
           // add nodes to the nodeMap
-          case 'addNode': {
+          case "addNode": {
             const node = message.node;
             node.children = [];
 
@@ -40,11 +40,17 @@
               const target = nodeMap.get(message.target);
               if (target) insert(node, target);
               else {
-                node.tagName = 'Root';
+                node.tagName = "Root";
                 rootNodes.set([node]);
               }
             }, 100);
 
+            break;
+          }
+          // update nodes within the nodeMap
+          case "updateNode": {
+            const node = nodeMap.get(message.node.id);
+            Object.assign(node, message.node);
             break;
           }
         }
