@@ -55,3 +55,7 @@ When inspecting one of the components nodes in Sveltechron, users are also able 
 [Sean Romine](https://github.com/seanRomine)
 
 [Will Pratt](https://github.com/WillPrattCodes)
+
+
+## License
+Distributed under the MIT License. See LICENSE.txt for more information.
